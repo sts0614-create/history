@@ -7,6 +7,12 @@
 <meta name="description" content="2022 개정 교육과정 중학교 역사② Ⅰ단원 국가의 형성과 발전 — 차시별 영상, 교사 발문, 생각 질문, 수업 게임과 한강 쟁탈전 시뮬레이션">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="ui.css">
+<style>
+.catalog-row{display:grid;grid-template-columns:minmax(230px,1fr) auto;gap:16px;align-items:center;padding:14px 26px;border-top:1px solid var(--line)}
+.catalog-title{display:flex;align-items:flex-start;gap:12px;min-width:0}.catalog-no{color:var(--brand);font:800 21px/1.2 var(--f);font-variant-numeric:tabular-nums;flex:none}.catalog-name{min-width:0}.catalog-name b{display:block;font-size:15px;line-height:1.45}.catalog-name span{display:block;margin-top:3px;color:var(--muted);font-size:12px}
+.catalog-links{display:flex;justify-content:flex-end;gap:6px;flex-wrap:wrap}.catalog-links a{display:inline-flex;align-items:center;gap:5px;min-height:34px;padding:6px 9px;border:1px solid var(--line);border-radius:6px;text-decoration:none;color:var(--ink2);font-size:12px;font-weight:700;white-space:nowrap}.catalog-links a:hover{border-color:var(--brand);background:var(--brand-soft);color:var(--brand-strong)}.catalog-links a:first-child{border-color:var(--brand);color:var(--brand-strong)}.catalog-links small{color:var(--muted);font-size:11px}
+@media(max-width:760px){.catalog-row{grid-template-columns:1fr;gap:9px;padding:13px 16px}.catalog-links{justify-content:flex-start;padding-left:39px}}
+</style>
 </head>
 <body>
 <div id="gnb"></div>
@@ -21,13 +27,17 @@
   const nVid = LESSONS.reduce((s, l) => s + l.videos.length, 0);
   const done = K1.store.get("done", {});
   const row = l => {
-    const st = done[l.n] ? '<span class="chip ok">수업함</span>' : "";
-    return `<li><a class="lrow" href="lesson.html?n=${l.n}">
-      <span class="lnum">${l.n}<small>차시</small></span>
-      <span class="ltitle"><b>${esc(l.title)}</b><span>${esc(l.eraLabel)} · ${l.std === "전체" ? "단원 정리" : esc(l.std)}</span></span>
-      <span>${eraMini(l)}</span>
-      <span class="lmeta">${st || `슬라이드 ${(window.SLIDES || {})[l.n] || ""}장 · 영상 ${l.videos.length}`}</span>
-      <span class="chev">${I.right.replace("<svg", '<svg width="18" height="18"')}</span></a></li>`;
+    const activityHref = l.game.sim ? "sim.html" : `game.html?g=${encodeURIComponent(l.game.id)}`;
+    const activityType = l.game.sim ? "시뮬레이션" : "게임";
+    const status = done[l.n] ? '<span class="chip ok">수업함</span>' : "";
+    return `<li class="catalog-row">
+      <div class="catalog-title"><span class="catalog-no">${l.n}</span><span class="catalog-name"><b>${esc(l.title)} ${status}</b><span>${esc(l.eraLabel)} · ${l.std === "전체" ? "단원 정리" : esc(l.std)}</span></span></div>
+      <div class="catalog-links">
+        <a href="slides${l.n}.html">수업 슬라이드 <small>${(window.SLIDES || {})[l.n] || ""}장</small></a>
+        <a href="lesson.html?n=${l.n}">차시 자료 <small>${l.videos.length}편 영상</small></a>
+        <a href="${activityHref}">${activityType} <small>${esc(l.game.time)}</small></a>
+      </div>
+    </li>`;
   };
   const demo = { own: { gungnae: "G", pyeongyang: "G", hanseong: "S", chungju: "S", ungjin: "B", sabi: "B", gwansan: "S", geumseong: "S", daegaya: "Y", geumgwan: "S" }, cap: { G: "pyeongyang", B: "sabi", S: "geumseong" }, hl: ["hanseong"] };
   document.getElementById("main").innerHTML = `
@@ -42,23 +52,13 @@
 
     <section class="card" style="margin-bottom:20px">
       <div class="sec" style="padding-bottom:6px">
-        <div class="sec-h"><h2>차시</h2><span class="meta">막대는 그 차시가 다루는 시기입니다</span></div>
+        <div class="sec-h"><h2>차시별 자료</h2><span class="meta">슬라이드에는 영상 · 사료 · 발문 · 생각 열기 질문이 포함됩니다</span></div>
       </div>
       <div style="display:grid;grid-template-columns:56px minmax(0,1fr) 210px 120px 28px;gap:16px;padding:0 26px 6px" class="screen-only lg-only" aria-hidden="true">
         <span></span><span></span><span style="position:relative;height:16px">${["기원전 2000", "1", "600년"].map((t, i) => `<span style="position:absolute;left:${[0, K1.eraX(1), 100][i]}%;transform:translateX(${["0", "-50%", "-100%"][i]});font-size:11px;color:var(--muted);white-space:nowrap">${t}</span>`).join("")}</span><span></span><span></span>
       </div>
       <ol class="lessons">${LESSONS.map(row).join("")}</ol>
     </section>
-
-    <a class="card feature" href="sim.html" style="margin-bottom:20px">
-      <div class="txt">
-        <span class="chip brand">시뮬레이션 · 6차시</span>
-        <h3>한강 쟁탈전 371–562</h3>
-        <p>근초고왕, 소수림왕, 장수왕, 성왕, 진흥왕의 자리에 앉아 11번의 결정을 내립니다. 학생들이 고른 선택을 실제 역사와 비교하고, 지도에서 한강의 주인이 바뀌는 과정을 따라갑니다.</p>
-        <span class="btn pri">${I.map}시뮬레이션 시작</span>
-      </div>
-      <div class="pic">${K1MAP.svg(demo, { small: true, label: "553년 신라가 한강 유역을 차지한 지도" })}</div>
-    </a>
 
     <section class="card">
       <div class="sec">

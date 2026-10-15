@@ -9,110 +9,125 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%230e6a62%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-size=%2716%27 text-anchor=%27middle%27 fill=%27white%27 font-weight=%27800%27%3E%E5%8F%B2%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="korea1/ui.css">
 <style>
-/* 첫 화면 전용 — 색·서체·간격은 korea1/ui.css 의 디자인 토큰을 그대로 쓴다 */
-.home-hero{display:grid;grid-template-columns:1fr auto;gap:28px;align-items:end;padding:28px 0 26px}
-.home-hero h1{margin:10px 0 10px;font-size:clamp(30px,4.2vw,46px);line-height:1.15;letter-spacing:-.03em;font-weight:800}
-.home-hero .lead{margin:0}
-.how{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface);box-shadow:var(--sh);overflow:hidden;margin:0 0 22px}
-.how div{padding:16px 18px}.how div+div{border-left:1px solid var(--line)}
-.how b{display:flex;align-items:center;gap:8px;font-size:14px}.how b i{width:22px;height:22px;border-radius:6px;background:var(--brand-soft);color:var(--brand-strong);display:grid;place-items:center;font-style:normal;font-size:12px;font-weight:800}
-.how span{display:block;color:var(--muted);font-size:13px;margin-top:4px;line-height:1.5}
-.feat{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);overflow:hidden}
-.feat-l{padding:26px 28px}
-.feat-l h2{margin:10px 0 6px;font-size:24px;letter-spacing:-.02em}
-.feat-l .lead{font-size:15px;margin:0 0 18px}
-.ls{list-style:none;margin:0 0 20px;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.ls a{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r-sm);text-decoration:none;background:var(--surface);transition:border-color .12s,background .12s;min-width:0}
-.ls a:hover{border-color:var(--brand);background:var(--brand-soft)}
-.ls .n{font-weight:800;color:var(--brand);font-size:17px;width:18px;flex:none;font-variant-numeric:tabular-nums}
-.ls .t{min-width:0}.ls .t b{display:block;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ls .t span{display:block;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.feat-r{background:var(--sunk);border-left:1px solid var(--line);padding:22px;display:flex;flex-direction:column;gap:12px}
-.feat-r h3{margin:0;font-size:13px;color:var(--muted);font-weight:600}
-.std{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--ink2);line-height:1.5}.std code{flex:none;font:600 12px/1 var(--f);background:var(--brand-soft);color:var(--brand-strong);padding:5px 7px;border-radius:6px}
-.tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:16px}
-.tool{display:flex;flex-direction:column;text-decoration:none;overflow:hidden;transition:box-shadow .15s,transform .15s}
-.tool:hover{box-shadow:var(--sh-pop);transform:translateY(-2px)}
-.tool .art{height:150px;display:grid;place-items:center;border-bottom:1px solid var(--line);position:relative;overflow:hidden}
-.tool .art.han{background:linear-gradient(135deg,#eaf2f8,#e3f1ef)}
-.tool .art.hg{background:linear-gradient(135deg,#f6efe4,#f3eef8)}
-.tool .art svg{width:100%;height:100%}
-.tool .bd{padding:18px 20px 20px}.tool h3{margin:8px 0 6px;font-size:18px;letter-spacing:-.01em}.tool p{margin:0;color:var(--ink2);font-size:14px;line-height:1.6}
-.tool .go{margin-top:14px;display:inline-flex;align-items:center;gap:6px;color:var(--brand);font-weight:700;font-size:14px}
-.sec-title{display:flex;align-items:baseline;justify-content:space-between;margin:34px 0 12px}.sec-title h2{margin:0;font-size:18px}.sec-title span{font-size:13px;color:var(--muted)}
-footer.f{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:13px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tool .art.han{background:linear-gradient(135deg,#16232c,#173230)}:root:not([data-theme="light"]) .tool .art.hg{background:linear-gradient(135deg,#2a2419,#241f2e)}}
-@media (max-width:960px){.feat{grid-template-columns:1fr}.feat-r{border-left:0;border-top:1px solid var(--line)}.ls{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:720px){.home-hero{grid-template-columns:1fr}.how{grid-template-columns:1fr 1fr}.how div:nth-child(3){border-left:0}.how div:nth-child(n+3){border-top:1px solid var(--line)}.tools{grid-template-columns:1fr}.feat-l{padding:20px 16px}.ls{grid-template-columns:1fr}}
+.catalog-head{padding:28px 0 20px;border-bottom:1px solid var(--line)}
+.catalog-head h1{margin:10px 0;font-size:36px;line-height:1.2;font-weight:800}
+.catalog-head .lead{max-width:760px;margin:0}
+.stats{display:flex;gap:26px;flex-wrap:wrap;margin-top:22px}
+.stat{display:flex;align-items:baseline;gap:7px}.stat b{font:700 22px/1 var(--f);font-variant-numeric:tabular-nums;color:var(--brand)}.stat span{font-size:13px;color:var(--muted)}
+.catalog-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:18px 0}
+.catalog-search{flex:1 1 260px;position:relative}.catalog-search input{width:100%;min-height:42px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font:inherit}
+.filters{display:inline-flex;padding:3px;border:1px solid var(--line);border-radius:8px;background:var(--sunk);gap:2px}
+.filters button{min-height:34px;padding:6px 11px;border:0;border-radius:6px;background:transparent;color:var(--ink2);font:600 13px var(--f);cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px #15202b22}
+.level{margin-top:18px}.level-title{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-size:19px}.level-title small{font-size:13px;font-weight:500;color:var(--muted)}
+.branch{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface)}
+.branch+ .branch{border-top:0}
+.branch>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:54px;padding:12px 16px;cursor:pointer;list-style:none;font-weight:750}
+.branch>summary::-webkit-details-marker{display:none}.branch>summary:before{content:"+";display:grid;place-items:center;width:22px;height:22px;border:1px solid var(--line);border-radius:5px;color:var(--brand);font:700 16px var(--f)}.branch[open]>summary:before{content:"−"}
+.branch-count{color:var(--muted);font-size:12px;font-weight:600;white-space:nowrap}
+.unit{padding:0 16px 18px 52px}.unit-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;padding:12px 0 16px;border-top:1px solid var(--line)}
+.unit-head h3{margin:0 0 5px;font-size:18px}.unit-head p{margin:0;color:var(--ink2);font-size:13px;line-height:1.6}
+.standards{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.standards code{padding:5px 7px;background:var(--brand-soft);border-radius:5px;color:var(--brand-strong);font:600 11px var(--f);white-space:nowrap}
+.lesson-list{list-style:none;padding:0;margin:0;border-top:1px solid var(--line)}.lesson-item{display:grid;grid-template-columns:minmax(220px,1fr) auto;align-items:center;gap:16px;padding:13px 0;border-bottom:1px solid var(--line)}
+.lesson-title{display:flex;gap:12px;min-width:0;align-items:flex-start}.lesson-no{width:27px;flex:none;color:var(--brand);font:700 18px/1.3 var(--f);font-variant-numeric:tabular-nums}.lesson-name{min-width:0}.lesson-name b{display:block;font-size:14px;line-height:1.45}.lesson-name span{display:block;margin-top:3px;color:var(--muted);font-size:12px}
+.resources{display:flex;justify-content:flex-end;gap:6px;flex-wrap:wrap}.resource{display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:6px 9px;border:1px solid var(--line);border-radius:6px;text-decoration:none;color:var(--ink2);font-size:12px;font-weight:700;white-space:nowrap}.resource:hover{border-color:var(--brand);color:var(--brand-strong);background:var(--brand-soft)}.resource[data-kind="slides"]{border-color:var(--brand);color:var(--brand-strong)}
+.more-resources{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0 24px;border-top:1px solid var(--line);margin-top:24px}.more-resources a{display:flex;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);text-decoration:none}.more-resources b{font-size:14px}.more-resources span{color:var(--muted);font-size:12px}
+.empty{padding:28px;text-align:center;color:var(--muted)}
+footer.f{margin-top:38px;padding:18px 0;border-top:1px solid var(--line);color:var(--muted);font-size:13px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+@media (max-width:760px){.catalog-head h1{font-size:30px}.lesson-item{grid-template-columns:1fr;gap:9px}.resources{justify-content:flex-start;padding-left:39px}.unit{padding-left:16px}.unit-head{display:block}.standards{justify-content:flex-start;margin-top:10px}.branch>summary{padding-inline:12px}}
 </style>
 </head>
 <body>
 <header class="gnb"><div class="gnb-in"><a class="logo" href="index.html"><i>史</i><span>역사 수업 실험실</span></a><span class="sp"></span><a class="btn ghost sm hide-m" href="korea1/index.html">역사② Ⅰ단원</a><a class="btn pri sm" href="korea1/sim.html">한강 쟁탈전</a></div></header>
 <main class="page">
-  <section class="home-hero">
-    <div>
-      <div class="kicker"><span class="chip brand">2022 개정 교육과정</span><span class="chip">중학교 역사 · 고등학교 한국사</span></div>
-      <h1>보고, 묻고, 겨루며<br>배우는 역사 수업</h1>
-      <p class="lead">차시마다 <b>수업 슬라이드</b> 하나를 TV에 띄우면 수업이 흘러갑니다. 영상으로 열고, 사료로 묻고, 게임으로 겨루고, 확인 문제와 나가기 전 한 문제로 닫습니다. 설치 없이 브라우저에서 바로 열립니다.</p>
+  <header class="catalog-head">
+    <div class="kicker"><span class="chip brand">2022 개정 교육과정</span><span class="chip">중학교 역사 · 고등학교 한국사</span></div>
+    <h1>역사 수업 자료실</h1>
+    <p class="lead">학교급과 교과, 단원, 차시 순서로 자료를 찾으세요. 슬라이드 안에서 영상·사료·발문·생각 열기 질문을 함께 진행할 수 있습니다.</p>
+    <div class="stats" aria-label="자료 현황"><div class="stat"><b id="lesson-count">9</b><span>차시</span></div><div class="stat"><b id="slide-count">180</b><span>수업 슬라이드</span></div><div class="stat"><b id="video-count">0</b><span>추천 영상</span></div><div class="stat"><b>8 + 1</b><span>게임 · 시뮬레이션</span></div></div>
+  </header>
+
+  <section class="catalog" aria-label="교육과정 자료 목차">
+    <div class="catalog-controls">
+      <label class="catalog-search"><span class="sr-only">차시 검색</span><input id="catalog-search" type="search" placeholder="차시·시대·자료 검색" autocomplete="off"></label>
+      <div class="filters" role="group" aria-label="자료 유형">
+        <button type="button" data-filter="all" aria-pressed="true">전체</button>
+        <button type="button" data-filter="slides" aria-pressed="false">수업 슬라이드</button>
+        <button type="button" data-filter="activity" aria-pressed="false">게임·시뮬레이션</button>
+      </div>
     </div>
+
+    <section class="level" aria-labelledby="middle-school-title">
+      <h2 class="level-title" id="middle-school-title">중학교 <small>역사</small></h2>
+      <details class="branch" open>
+        <summary><span>역사②</span><span class="branch-count">중학교 2학년 · 2022 개정 교육과정</span></summary>
+        <div class="unit">
+          <div class="unit-head">
+            <div><h3>Ⅰ. 국가의 형성과 발전</h3><p>고조선의 성립부터 삼국과 가야의 성장·문화까지 · 9차시</p></div>
+            <div class="standards" aria-label="성취기준"><code>9역08-01</code><code>9역08-02</code><code>9역08-03</code></div>
+          </div>
+          <ol class="lesson-list" id="lesson-catalog"></ol>
+          <p id="no-results" class="empty" hidden>조건에 맞는 차시가 없습니다.</p>
+        </div>
+      </details>
+    </section>
+
+    <section class="level" aria-labelledby="related-title">
+      <h2 class="level-title" id="related-title">주제별 추가 자료</h2>
+      <div class="more-resources">
+        <a href="hangeul/sim.html"><b>훈민정음 창제 원리 실험실</b><span>시뮬레이션 · 조선 전기</span></a>
+        <a href="korea1/teacher-kit.html"><b>교사용 차시 설계표</b><span>영상 · 사료 · 발문 · 생각 질문</span></a>
+        <a href="korea1/sim.html"><b>한강 쟁탈전 371–562</b><span>시뮬레이션 · 모둠 활동</span></a>
+      </div>
+    </section>
   </section>
-
-  <div class="how" aria-label="한 차시 흐름">
-    <div><b><i>1</i>열기</b><span>학습 목표 · 영상(화면 안에서 재생) · 생각 열기 발문</span></div>
-    <div><b><i>2</i>개념 · 사료</b><span>한 줄씩 나타나는 설명 · 사료 읽기 · 비교표</span></div>
-    <div><b><i>3</i>게임 · 시뮬레이션</b><span>슬라이드 안에서 바로 · 활동 타이머 · 모둠 점수판</span></div>
-    <div><b><i>4</i>확인 · 정리</b><span>눌러서 채점하는 문제 · 생각 질문 3개 · 빈칸 정리 · 나가기 전 한 문제</span></div>
-  </div>
-
-  <article class="card feat">
-    <div class="feat-l">
-      <div class="kicker"><span class="chip brand">중2 · 역사②</span><span class="chip">9차시 · 수업 슬라이드 180장 · 게임 8종 + 시뮬레이션</span></div>
-      <h2>Ⅰ. 국가의 형성과 발전</h2>
-      <p class="lead">고조선의 성립부터 562년 대가야 멸망까지. 차시를 고르면 바로 수업 자료가 열리고, [수업 모드]로 교실 TV에 한 장씩 띄울 수 있습니다.</p>
-      <ul class="ls" id="ls"></ul>
-      <a class="btn pri" href="korea1/index.html">단원 전체 보기</a>
-    </div>
-    <aside class="feat-r">
-      <h3>성취기준</h3>
-      <div class="std"><code>9역08-01</code>고조선과 여러 나라의 형성 과정 및 사회 모습을 탐구한다.</div>
-      <div class="std"><code>9역08-02</code>삼국과 가야의 성장 과정을 파악한다.</div>
-      <div class="std"><code>9역08-03</code>삼국과 가야가 남긴 문화의 특징을 분석한다.</div>
-    </aside>
-  </article>
-
-  <div class="sec-title"><h2>시뮬레이션</h2><span>모둠 활동 20분 안팎</span></div>
-  <div class="tools">
-    <a class="card tool" href="korea1/sim.html">
-      <div class="art han" aria-hidden="true"><svg viewBox="0 0 400 150" preserveAspectRatio="xMidYMid slice"><path d="M60 120 C120 70 170 95 220 60 S330 40 380 20" fill="none" stroke="#2d5ba8" stroke-width="5" stroke-linecap="round" opacity=".55"/><g font-family="Pretendard,sans-serif" font-weight="800" font-size="13"><circle cx="110" cy="92" r="9" fill="#2d5ba8"/><text x="124" y="97" fill="#2d5ba8">백제 371</text><circle cx="215" cy="64" r="9" fill="#b4412f"/><text x="229" y="69" fill="#b4412f">고구려 475</text><circle cx="320" cy="38" r="9" fill="#b88a1b"/><text x="334" y="43" fill="#b88a1b">신라 553</text></g></svg></div>
-      <div class="bd"><span class="chip brand">6차시 · 역사② Ⅰ단원</span><h3>한강 쟁탈전 371–562</h3><p>근초고왕·소수림왕·장수왕·성왕·진흥왕의 자리에서 11번의 결정을 내립니다. 모둠 투표 → 실제 역사 공개 → 지도에서 한강의 주인이 바뀝니다.</p><span class="go">시작하기 →</span></div>
-    </a>
-    <a class="card tool" href="hangeul/sim.html">
-      <div class="art hg" aria-hidden="true"><svg viewBox="0 0 400 150" preserveAspectRatio="xMidYMid slice"><g font-family="serif" font-weight="800" fill="#9a3b2c" opacity=".85"><text x="70" y="100" font-size="64">ㄱ</text><text x="150" y="100" font-size="64">ㅋ</text><text x="230" y="100" font-size="64">ㆍ</text><text x="290" y="100" font-size="64">ㅡ</text></g></svg></div>
-      <div class="bd"><span class="chip">조선 전기 · 민족 문화</span><h3>훈민정음 창제 원리 실험실</h3><p>발음 기관을 본뜬 상형, 획을 더하는 가획, 천지인으로 모음 만들기, 글자 조합 게임, 서문 사료 읽기까지 직접 만들어 봅니다.</p><span class="go">시작하기 →</span></div>
-    </a>
-  </div>
-
-  <div class="sec-title" style="margin-top:26px"><h2>교실 설계 코어</h2><span>영상 · 사료 · 발문 · 질문</span></div>
-  <div class="tools">
-    <a class="card tool" href="korea1/teacher-kit.html">
-      <div class="art han" aria-hidden="true"><svg viewBox="0 0 400 150" preserveAspectRatio="xMidYMid slice"><rect x="35" y="32" width="330" height="86" rx="14" fill="#edf4ff"/><path d="M70 111 L118 62 L165 111 M150 111 L198 62 L245 111 M230 111 L278 62 L325 111" fill="none" stroke="#2d5ba8" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="bd"><span class="chip brand">교사 설계표</span><h3>영상·사료·발문 설계표</h3><p>차시별로 영상 계획, 핵심 사료, 교사 발문, 생각을 여는 질문을 한 번에 조망할 수 있습니다.</p><span class="go">설계표 보기 →</span></div>
-    </a>
-    <a class="card tool" href="korea1/lesson.html?n=1">
-      <div class="art hg" aria-hidden="true"><svg viewBox="0 0 400 150" preserveAspectRatio="xMidYMid slice"><rect x="50" y="30" width="300" height="90" rx="12" fill="#f4efe9"/><path d="M85 95h70M85 75h120M85 55h100M225 55h75M225 75h95M225 95h70" stroke="#9a3b2c" stroke-width="5" stroke-linecap="round"/></svg></div>
-      <div class="bd"><span class="chip">교실 운영</span><h3>수업 모드와 발문 구조</h3><p>영상으로 열기 → 사료 읽기 → 발문 → 게임 → 정리 질문까지 한 장 안에서 기획 가능한 구조입니다.</p><span class="go">차시 열기 →</span></div>
-    </a>
-  </div>
-
-  <footer class="f"><span>역사 수업 실험실 · 2022 개정 교육과정 기준</span><span>영상은 수업 전에 미리보기로 길이와 구간을 확인하세요.</span></footer>
+  <footer class="f"><span>역사 수업 실험실 · 설치 없이 브라우저에서 실행</span><span>영상 자료는 수업 전에 링크와 재생 구간을 확인하세요.</span></footer>
 </main>
 <script src="korea1/data.js"></script><script src="korea1/slides.js"></script>
 <script>
 (function () {
   var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] }) };
-  var short = function (t) { return String(t).split(" — ")[0] };
-  document.getElementById("ls").innerHTML = (window.LESSONS || []).map(function (l) {
-    return '<li><a href="korea1/lesson.html?n=' + l.n + '"><span class="n">' + l.n + '</span><span class="t"><b>' + esc(short(l.title)) + '</b><span>' + esc(l.game.sim ? "시뮬레이션 · " + l.game.time : "게임 " + l.game.name) + '</span></span></a></li>';
-  }).join("");
+  var lessons = window.LESSONS || [];
+  var slides = window.SLIDES || {};
+  var rows = lessons.map(function (lesson) {
+    var activityHref = lesson.game.sim ? "korea1/sim.html" : "korea1/game.html?g=" + encodeURIComponent(lesson.game.id);
+    var activityType = lesson.game.sim ? "시뮬레이션" : "게임";
+    var haystack = [lesson.title, lesson.eraLabel, lesson.std, lesson.game.name, lesson.game.how].join(" ").toLowerCase();
+    return '<li class="lesson-item" data-search="' + esc(haystack) + '">' +
+      '<div class="lesson-title"><span class="lesson-no">' + lesson.n + '</span><span class="lesson-name"><b>' + esc(lesson.title) + '</b><span>' + esc(lesson.eraLabel) + ' · ' + esc(lesson.std === "전체" ? "단원 정리" : lesson.std) + '</span></span></div>' +
+      '<div class="resources">' +
+        '<a class="resource" data-kind="slides" href="korea1/slides' + lesson.n + '.html">수업 슬라이드 <span>' + (slides[lesson.n] || "") + '장</span></a>' +
+        '<a class="resource" data-kind="lesson" href="korea1/lesson.html?n=' + lesson.n + '">차시 자료 <span>영상·사료·발문</span></a>' +
+        '<a class="resource" data-kind="activity" href="' + activityHref + '">' + activityType + ' <span>' + esc(lesson.game.time) + '</span></a>' +
+      '</div></li>';
+  });
+  var catalog = document.getElementById("lesson-catalog");
+  catalog.innerHTML = rows.join("");
+  document.getElementById("lesson-count").textContent = lessons.length;
+  document.getElementById("slide-count").textContent = Object.keys(slides).reduce(function (sum, n) { return sum + slides[n]; }, 0);
+  document.getElementById("video-count").textContent = lessons.reduce(function (sum, lesson) { return sum + lesson.videos.length; }, 0);
+
+  var query = document.getElementById("catalog-search");
+  var filter = "all";
+  function updateCatalog() {
+    var text = query.value.trim().toLowerCase();
+    var visible = 0;
+    catalog.querySelectorAll(".lesson-item").forEach(function (row) {
+      var matchesText = !text || row.dataset.search.indexOf(text) !== -1;
+      var matchesType = filter === "all" || !!row.querySelector('[data-kind="' + filter + '"]');
+      row.hidden = !(matchesText && matchesType);
+      if (!row.hidden) visible++;
+    });
+    document.getElementById("no-results").hidden = visible !== 0;
+  }
+  query.addEventListener("input", updateCatalog);
+  document.querySelectorAll("[data-filter]").forEach(function (button) {
+    button.addEventListener("click", function () {
+      filter = button.dataset.filter;
+      document.querySelectorAll("[data-filter]").forEach(function (item) { item.setAttribute("aria-pressed", item === button ? "true" : "false"); });
+      updateCatalog();
+    });
+  });
 })();
 </script>
 </body>
