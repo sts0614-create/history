@@ -13,6 +13,7 @@
 <div class="pres" id="pres" hidden role="dialog" aria-modal="true" aria-label="수업 모드"></div>
 <script src="data.js"></script>
 <script src="common.js"></script>
+<script src="extended-sources.js"></script>
 <script>
 (function () {
   const { esc, I, BADGE, ytId, store, sfx } = K1, $ = id => document.getElementById(id);
@@ -60,6 +61,17 @@
         <div class="sec-h"><h2>영상으로 열기</h2><span class="meta">${L.videos.length}편 · 5분 안쪽으로 끊어 쓰기</span></div>
         <div class="vids">${L.videos.map(vid).join("")}</div>
         ${L.note ? `<p class="note-box">${esc(L.note)} ${L.source ? `<a href="${esc(L.source.url)}" target="_blank" rel="noopener">${esc(L.source.t)}</a>` : ""}</p>` : ""}
+      </section>
+      <section class="sec" id="sources">
+        <div class="sec-h"><h2>추가 사료와 질문</h2><span class="meta">교실 토론용 보충 자료</span></div>
+        <div class="think">${(window.EXTENDED_SOURCES && window.EXTENDED_SOURCES[n]) ? window.EXTENDED_SOURCES[n].map((src, idx) => `
+          <div class="tq">
+            <span class="n">${idx + 1}</span>
+            <p><strong>${esc(src.title)}</strong> <span class="chip brand">${esc(src.type)}</span><br>${esc(src.excerpt)}</p>
+            <p style="margin-top:8px"><b>질문:</b> ${esc(src.question)}</p>
+            <p class="muted" style="margin-top:6px">${esc(src.note)}</p>
+          </div>
+        `).join("") : `<div class="tq"><span class="n">!</span><p>추가 사료가 아직 준비되지 않았습니다. 다음 단계에서 차시별 보충 자료를 확장할 수 있습니다.</p></div>`}</div>
       </section>
       <section class="sec" id="prompts">
         <div class="sec-h"><h2>교사 발문</h2><span id="prog">${progress()}</span></div>
