@@ -4,130 +4,38 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>역사 수업 실험실</title>
-<meta name="description" content="2022 개정 교육과정 중학교 역사·고등학교 한국사 수업 자료 — 차시별 영상·발문·생각 질문·수업 게임·시뮬레이션">
+<meta name="description" content="2022 개정 교육과정 중·고등학교 역사 단원별 수업 슬라이드, 학습지, 사료, 영상, 게임과 시뮬레이션">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%230e6a62%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-size=%2716%27 text-anchor=%27middle%27 fill=%27white%27 font-weight=%27800%27%3E%E5%8F%B2%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="korea1/ui.css">
 <style>
-.catalog-head{padding:28px 0 20px;border-bottom:1px solid var(--line)}
-.catalog-head h1{margin:10px 0;font-size:36px;line-height:1.2;font-weight:800}
-.catalog-head .lead{max-width:760px;margin:0}
-.stats{display:flex;gap:26px;flex-wrap:wrap;margin-top:22px}
-.stat{display:flex;align-items:baseline;gap:7px}.stat b{font:700 22px/1 var(--f);font-variant-numeric:tabular-nums;color:var(--brand)}.stat span{font-size:13px;color:var(--muted)}
-.catalog-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:18px 0}
-.catalog-search{flex:1 1 260px;position:relative}.catalog-search input{width:100%;min-height:42px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font:inherit}
-.filters{display:inline-flex;padding:3px;border:1px solid var(--line);border-radius:8px;background:var(--sunk);gap:2px}
-.filters button{min-height:34px;padding:6px 11px;border:0;border-radius:6px;background:transparent;color:var(--ink2);font:600 13px var(--f);cursor:pointer}
-.filters button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px #15202b22}
-.level{margin-top:18px}.level-title{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-size:19px}.level-title small{font-size:13px;font-weight:500;color:var(--muted)}
-.branch{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface)}
-.branch+ .branch{border-top:0}
-.branch>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:54px;padding:12px 16px;cursor:pointer;list-style:none;font-weight:750}
-.branch>summary::-webkit-details-marker{display:none}.branch>summary:before{content:"+";display:grid;place-items:center;width:22px;height:22px;border:1px solid var(--line);border-radius:5px;color:var(--brand);font:700 16px var(--f)}.branch[open]>summary:before{content:"−"}
-.branch-count{color:var(--muted);font-size:12px;font-weight:600;white-space:nowrap}
-.unit{padding:0 16px 18px 52px}.unit-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;padding:12px 0 16px;border-top:1px solid var(--line)}
-.unit-head h3{margin:0 0 5px;font-size:18px}.unit-head p{margin:0;color:var(--ink2);font-size:13px;line-height:1.6}
-.standards{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.standards code{padding:5px 7px;background:var(--brand-soft);border-radius:5px;color:var(--brand-strong);font:600 11px var(--f);white-space:nowrap}
-.lesson-list{list-style:none;padding:0;margin:0;border-top:1px solid var(--line)}.lesson-item{display:grid;grid-template-columns:minmax(220px,1fr) auto;align-items:center;gap:16px;padding:13px 0;border-bottom:1px solid var(--line)}
-.lesson-title{display:flex;gap:12px;min-width:0;align-items:flex-start}.lesson-no{width:27px;flex:none;color:var(--brand);font:700 18px/1.3 var(--f);font-variant-numeric:tabular-nums}.lesson-name{min-width:0}.lesson-name b{display:block;font-size:14px;line-height:1.45}.lesson-name span{display:block;margin-top:3px;color:var(--muted);font-size:12px}
-.resources{display:flex;justify-content:flex-end;gap:6px;flex-wrap:wrap}.resource{display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:6px 9px;border:1px solid var(--line);border-radius:6px;text-decoration:none;color:var(--ink2);font-size:12px;font-weight:700;white-space:nowrap}.resource:hover{border-color:var(--brand);color:var(--brand-strong);background:var(--brand-soft)}.resource[data-kind="slides"]{border-color:var(--brand);color:var(--brand-strong)}
-.more-resources{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0 24px;border-top:1px solid var(--line);margin-top:24px}.more-resources a{display:flex;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);text-decoration:none}.more-resources b{font-size:14px}.more-resources span{color:var(--muted);font-size:12px}
-.empty{padding:28px;text-align:center;color:var(--muted)}
-footer.f{margin-top:38px;padding:18px 0;border-top:1px solid var(--line);color:var(--muted);font-size:13px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-@media (max-width:760px){.catalog-head h1{font-size:30px}.lesson-item{grid-template-columns:1fr;gap:9px}.resources{justify-content:flex-start;padding-left:39px}.unit{padding-left:16px}.unit-head{display:block}.standards{justify-content:flex-start;margin-top:10px}.branch>summary{padding-inline:12px}}
+:root{color-scheme:light;--ink:#182522;--muted:#65736f;--line:#dce4df;--paper:#f5f7f4;--white:#fff;--brand:#126b5b;--brand-dark:#0d4f45;--mint:#e6f2ed;--gold:#c79644;--shadow:0 12px 30px #183a2a0c;font-family:Pretendard,"IBM Plex Sans KR",sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-size:15px;line-height:1.55}a{color:inherit}.wrap{max-width:1180px;margin:auto;padding:0 28px}.top{position:sticky;top:0;z-index:3;background:#fffffff2;border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}.nav{height:64px;display:flex;align-items:center;gap:24px}.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:800;letter-spacing:-.03em}.seal{display:grid;place-items:center;width:34px;height:34px;background:var(--brand);color:white;border-radius:9px;font-size:17px}.navlinks{margin-left:auto;display:flex;gap:10px}.navlinks a,.pill-link{padding:8px 12px;border-radius:7px;text-decoration:none;font-size:13px;font-weight:700;color:var(--muted)}.navlinks a:hover,.pill-link:hover{background:var(--mint);color:var(--brand-dark)}.hero{padding:54px 0 34px;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:end}.eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;color:var(--brand);text-transform:uppercase}.hero h1{font-size:clamp(34px,5vw,54px);letter-spacing:-.055em;line-height:1.08;margin:11px 0 14px}.hero p{margin:0;color:var(--muted);max-width:690px;font-size:16px}.hero-aside{border-left:1px solid var(--line);padding:8px 0 8px 22px;color:var(--muted);font-size:13px}.hero-aside b{display:block;color:var(--ink);font-size:25px;line-height:1.2;margin-bottom:4px;letter-spacing:-.04em}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 0 30px}.stat{padding:17px 19px;background:var(--white);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow)}.stat strong{font-size:24px;letter-spacing:-.04em;color:var(--brand-dark);margin-right:7px}.stat span{font-size:13px;color:var(--muted)}.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin:30px 0 13px}.section-head h2{font-size:21px;letter-spacing:-.035em;margin:0}.section-head p{font-size:13px;color:var(--muted);margin:0}.toolrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:14px 0 18px}.search{flex:1 1 270px}.search input{width:100%;height:44px;border:1px solid var(--line);border-radius:8px;background:white;padding:0 14px;font:inherit;outline:none}.search input:focus{border-color:var(--brand);box-shadow:0 0 0 3px #126b5b18}.seg{display:flex;padding:3px;border:1px solid var(--line);background:#edf1ed;border-radius:9px;gap:3px}.seg button{border:0;border-radius:6px;background:transparent;padding:8px 13px;font:700 13px inherit;color:var(--muted);cursor:pointer}.seg button[aria-pressed=true]{background:white;color:var(--brand-dark);box-shadow:0 1px 4px #18252218}.ready-toggle{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:13px;white-space:nowrap}.ready-toggle input{accent-color:var(--brand);width:16px;height:16px}.course{margin:12px 0;border:1px solid var(--line);border-radius:11px;background:white;overflow:hidden;box-shadow:var(--shadow)}.course summary{list-style:none;display:flex;align-items:center;gap:14px;padding:17px 20px;cursor:pointer}.course summary::-webkit-details-marker{display:none}.course summary:before{content:'+';display:grid;place-items:center;width:25px;height:25px;flex:none;border:1px solid var(--line);border-radius:6px;color:var(--brand);font-weight:800}.course[open] summary:before{content:'−'}.course-name{flex:1;min-width:0}.course-name b{display:block;font-size:16px;letter-spacing:-.02em}.course-name span{display:block;color:var(--muted);font-size:12px;margin-top:2px}.course-meta{font-size:12px;color:var(--muted);white-space:nowrap}.units{padding:0 20px 8px 59px}.unit{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;border-top:1px solid #edf0ed;padding:13px 0}.unit b{font-size:14px;display:block}.unit p{font-size:12px;color:var(--muted);margin:3px 0 0}.actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.action{display:inline-flex;align-items:center;min-height:32px;padding:5px 9px;border:1px solid var(--line);border-radius:6px;text-decoration:none;font-size:11px;font-weight:750;color:var(--muted);white-space:nowrap}.action.ready{border-color:#b5d4c8;background:var(--mint);color:var(--brand-dark)}.action:hover{border-color:var(--brand);color:var(--brand-dark)}.planned{font-size:11px;color:#77827e;white-space:nowrap}.resources{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:20px 0 50px}.resource{padding:14px;border:1px solid var(--line);border-radius:9px;background:white}.resource i{font-style:normal;color:var(--brand);font-size:18px}.resource b{display:block;font-size:13px;margin-top:5px}.resource span{font-size:11px;color:var(--muted)}.footer{border-top:1px solid var(--line);padding:20px 0 30px;color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.empty{padding:28px;text-align:center;color:var(--muted)}[hidden]{display:none!important}@media(max-width:720px){.wrap{padding:0 17px}.nav{height:58px}.navlinks{gap:0}.navlinks a{padding:7px;font-size:12px}.hero{padding:35px 0 25px;grid-template-columns:1fr}.hero-aside{border:0;border-top:1px solid var(--line);padding:12px 0 0}.stats{gap:7px}.stat{padding:12px 10px}.stat strong{font-size:20px;display:block}.stat span{font-size:11px}.section-head{display:block}.section-head p{margin-top:4px}.toolrow{align-items:stretch}.seg{justify-content:space-between}.seg button{flex:1;padding-inline:6px}.ready-toggle{padding:3px}.course summary{padding:14px 12px;gap:9px}.course-meta{font-size:10px}.units{padding:0 12px 6px 18px}.unit{grid-template-columns:1fr;gap:7px}.actions{justify-content:flex-start}.resources{grid-template-columns:repeat(2,1fr)}.resources .resource:last-child{grid-column:span 2}}@media(prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}.course{transition:box-shadow .2s}.course:hover{box-shadow:0 14px 32px #183a2a12}}
 </style>
 </head>
 <body>
-<header class="gnb"><div class="gnb-in"><a class="logo" href="index.html"><i>史</i><span>역사 수업 실험실</span></a><span class="sp"></span><a class="btn ghost sm hide-m" href="korea1/index.html">역사② Ⅰ단원</a><a class="btn pri sm" href="korea1/sim.html">한강 쟁탈전</a></div></header>
-<main class="page">
-  <header class="catalog-head">
-    <div class="kicker"><span class="chip brand">2022 개정 교육과정</span><span class="chip">중학교 역사 · 고등학교 한국사</span></div>
-    <h1>역사 수업 자료실</h1>
-    <p class="lead">학교급과 교과, 단원, 차시 순서로 자료를 찾으세요. 슬라이드 안에서 영상·사료·발문·생각 열기 질문을 함께 진행할 수 있습니다.</p>
-    <div class="stats" aria-label="자료 현황"><div class="stat"><b id="lesson-count">9</b><span>차시</span></div><div class="stat"><b id="slide-count">180</b><span>수업 슬라이드</span></div><div class="stat"><b id="video-count">0</b><span>추천 영상</span></div><div class="stat"><b>8 + 1</b><span>게임 · 시뮬레이션</span></div></div>
-  </header>
-
-  <section class="catalog" aria-label="교육과정 자료 목차">
-    <div class="catalog-controls">
-      <label class="catalog-search"><span class="sr-only">차시 검색</span><input id="catalog-search" type="search" placeholder="차시·시대·자료 검색" autocomplete="off"></label>
-      <div class="filters" role="group" aria-label="자료 유형">
-        <button type="button" data-filter="all" aria-pressed="true">전체</button>
-        <button type="button" data-filter="slides" aria-pressed="false">수업 슬라이드</button>
-        <button type="button" data-filter="activity" aria-pressed="false">게임·시뮬레이션</button>
-      </div>
-    </div>
-
-    <section class="level" aria-labelledby="middle-school-title">
-      <h2 class="level-title" id="middle-school-title">중학교 <small>역사</small></h2>
-      <details class="branch" open>
-        <summary><span>역사②</span><span class="branch-count">중학교 2학년 · 2022 개정 교육과정</span></summary>
-        <div class="unit">
-          <div class="unit-head">
-            <div><h3>Ⅰ. 국가의 형성과 발전</h3><p>고조선의 성립부터 삼국과 가야의 성장·문화까지 · 9차시</p></div>
-            <div class="standards" aria-label="성취기준"><code>9역08-01</code><code>9역08-02</code><code>9역08-03</code></div>
-          </div>
-          <ol class="lesson-list" id="lesson-catalog"></ol>
-          <p id="no-results" class="empty" hidden>조건에 맞는 차시가 없습니다.</p>
-        </div>
-      </details>
-    </section>
-
-    <section class="level" aria-labelledby="related-title">
-      <h2 class="level-title" id="related-title">주제별 추가 자료</h2>
-      <div class="more-resources">
-        <a href="hangeul/sim.html"><b>훈민정음 창제 원리 실험실</b><span>시뮬레이션 · 조선 전기</span></a>
-        <a href="korea1/teacher-kit.html"><b>교사용 차시 설계표</b><span>영상 · 사료 · 발문 · 생각 질문</span></a>
-        <a href="korea1/sim.html"><b>한강 쟁탈전 371–562</b><span>시뮬레이션 · 모둠 활동</span></a>
-      </div>
-    </section>
-  </section>
-  <footer class="f"><span>역사 수업 실험실 · 설치 없이 브라우저에서 실행</span><span>영상 자료는 수업 전에 링크와 재생 구간을 확인하세요.</span></footer>
+<header class="top"><div class="wrap nav"><a class="logo" href="index.html"><span class="seal">史</span><span>역사 수업 실험실</span></a><nav class="navlinks" aria-label="주요 링크"><a href="#catalog">교육과정</a><a href="korea1/sim.html">한강 쟁탈전 ↗</a></nav></div></header>
+<main class="wrap">
+<section class="hero"><div><div class="eyebrow">2022 revised curriculum · history learning lab</div><h1>역사를 읽고,<br>직접 경험하다.</h1><p>중학교 역사부터 고등학교 한국사·세계사까지. 단원별 슬라이드와 학습지, 영상·사료, 교사 발문과 생각 질문, 게임과 시뮬레이션을 한곳에서 준비합니다.</p></div><div class="hero-aside"><b>수업에 바로 쓰는<br>역사 콘텐츠</b>탐구 · 토론 · 체험을 연결하는 교실 자료실</div></section>
+<section class="stats" aria-label="자료 현황"><div class="stat"><strong id="course-count">5</strong><span>교육과정</span></div><div class="stat"><strong id="topic-count">29</strong><span>학습 주제</span></div><div class="stat"><strong>9</strong><span>공개 차시 자료</span></div></section>
+<section id="catalog" aria-label="교육과정별 단원 찾아보기"><div class="section-head"><h2>교육과정별 단원</h2><p>과정과 단원을 고르고 수업 자료로 이동하세요.</p></div><div class="toolrow"><label class="search"><input id="search" type="search" placeholder="시대·단원·주제 검색" aria-label="시대, 단원, 주제 검색" autocomplete="off"></label><div class="seg" role="group" aria-label="학교급"><button type="button" data-level="all" aria-pressed="true">전체</button><button type="button" data-level="middle" aria-pressed="false">중학교</button><button type="button" data-level="high" aria-pressed="false">고등학교</button></div><label class="ready-toggle"><input id="only-ready" type="checkbox"> 공개 자료만 보기</label></div><div id="courses"></div><p class="empty" id="empty" hidden>검색 조건에 맞는 단원이 없습니다.</p></section>
+<section aria-label="단원별 제공 자료"><div class="section-head"><h2>한 단원, 하나의 완성된 수업 패키지</h2><p>각 단원은 교실 흐름에 맞춰 함께 설계합니다.</p></div><div class="resources"><article class="resource"><i>▤</i><b>수업 슬라이드</b><span>도입부터 정리까지</span></article><article class="resource"><i>▧</i><b>학습지</b><span>개인·모둠 탐구와 출력용</span></article><article class="resource"><i>▶</i><b>영상과 사료</b><span>출처·맥락·활용 안내</span></article><article class="resource"><i>?</i><b>발문과 생각 질문</b><span>근거를 찾고 토론하기</span></article><article class="resource"><i>✳</i><b>게임·시뮬레이션</b><span>역사적 선택을 체험하기</span></article></div></section>
+<footer class="footer"><span>역사 수업 실험실 · 2022 개정 교육과정 기반</span><span>공개된 자료와 준비 중인 주제를 구분해 안내합니다.</span></footer>
 </main>
-<script src="korea1/data.js"></script><script src="korea1/slides.js"></script>
 <script>
-(function () {
-  var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c] }) };
-  var lessons = window.LESSONS || [];
-  var slides = window.SLIDES || {};
-  var rows = lessons.map(function (lesson) {
-    var activityHref = lesson.game.sim ? "korea1/sim.html" : "korea1/game.html?g=" + encodeURIComponent(lesson.game.id);
-    var activityType = lesson.game.sim ? "시뮬레이션" : "게임";
-    var haystack = [lesson.title, lesson.eraLabel, lesson.std, lesson.game.name, lesson.game.how].join(" ").toLowerCase();
-    return '<li class="lesson-item" data-search="' + esc(haystack) + '">' +
-      '<div class="lesson-title"><span class="lesson-no">' + lesson.n + '</span><span class="lesson-name"><b>' + esc(lesson.title) + '</b><span>' + esc(lesson.eraLabel) + ' · ' + esc(lesson.std === "전체" ? "단원 정리" : lesson.std) + '</span></span></div>' +
-      '<div class="resources">' +
-        '<a class="resource" data-kind="slides" href="korea1/slides' + lesson.n + '.html">수업 슬라이드 <span>' + (slides[lesson.n] || "") + '장</span></a>' +
-        '<a class="resource" data-kind="lesson" href="korea1/lesson.html?n=' + lesson.n + '">차시 자료 <span>영상·사료·발문</span></a>' +
-        '<a class="resource" data-kind="activity" href="' + activityHref + '">' + activityType + ' <span>' + esc(lesson.game.time) + '</span></a>' +
-      '</div></li>';
-  });
-  var catalog = document.getElementById("lesson-catalog");
-  catalog.innerHTML = rows.join("");
-  document.getElementById("lesson-count").textContent = lessons.length;
-  document.getElementById("slide-count").textContent = Object.keys(slides).reduce(function (sum, n) { return sum + slides[n]; }, 0);
-  document.getElementById("video-count").textContent = lessons.reduce(function (sum, lesson) { return sum + lesson.videos.length; }, 0);
-
-  var query = document.getElementById("catalog-search");
-  var filter = "all";
-  function updateCatalog() {
-    var text = query.value.trim().toLowerCase();
-    var visible = 0;
-    catalog.querySelectorAll(".lesson-item").forEach(function (row) {
-      var matchesText = !text || row.dataset.search.indexOf(text) !== -1;
-      var matchesType = filter === "all" || !!row.querySelector('[data-kind="' + filter + '"]');
-      row.hidden = !(matchesText && matchesType);
-      if (!row.hidden) visible++;
-    });
-    document.getElementById("no-results").hidden = visible !== 0;
-  }
-  query.addEventListener("input", updateCatalog);
-  document.querySelectorAll("[data-filter]").forEach(function (button) {
-    button.addEventListener("click", function () {
-      filter = button.dataset.filter;
-      document.querySelectorAll("[data-filter]").forEach(function (item) { item.setAttribute("aria-pressed", item === button ? "true" : "false"); });
-      updateCatalog();
-    });
-  });
+(function(){
+var courses=[
+{id:'m1',level:'middle',name:'역사 1',grade:'중학교',meta:'세계사 중심',units:[['역사의 의미와 역사 탐구','역사 자료의 종류와 해석, 시대 구분'],['문명의 발생과 고대 세계의 형성','문명 발생과 고대 국가의 성장'],['세계 종교의 확산과 지역 문화의 형성','종교의 확산과 다양한 지역 문화'],['지역 세계의 교류와 변화','동아시아·인도·이슬람·유럽의 교류'],['제국주의와 국민 국가 건설 운동','제국주의의 확장과 근대 국민 국가'],['세계 대전과 사회 변동','전쟁의 전개와 사회의 변화'],['현대 세계의 전개','냉전, 탈냉전과 오늘날의 쟁점']]},
+{id:'m2',level:'middle',name:'역사 2',grade:'중학교',meta:'한국사 중심',units:[['국가의 형성과 발전','고조선부터 삼국·가야의 성장과 문화','korea1/index.html'],['남북국 시대와 고려의 발전','통일 신라·발해와 고려의 정치·사회'],['고려 사회와 문화','귀족 사회, 대외 관계와 고려 문화'],['조선의 건국과 통치 체제','조선의 국가 운영과 사회 질서'],['조선 사회의 변화와 개항','사회·경제 변화와 근대 전환'],['근대 국가 수립을 위한 노력','개항 이후 개혁과 국권 수호 운동'],['일제 식민 통치와 민족 운동','식민 지배와 다양한 독립운동'],['대한민국의 발전과 오늘날의 과제','정부 수립, 민주화와 현대 사회']]},
+{id:'h1',level:'high',name:'한국사 1',grade:'고등학교',meta:'전근대 한국사',units:[['고대 국가와 사회의 형성','선사 문화에서 삼국·남북국까지'],['고려의 성립과 변천','정치·사회 구조와 대외 관계'],['조선의 성립과 사회 발전','통치 체제, 경제와 문화'],['조선 후기 사회 변동','사회 변화와 근대 이행의 움직임']]},
+{id:'h2',level:'high',name:'한국사 2',grade:'고등학교',meta:'근현대 한국사',units:[['근대 국민 국가 수립을 위한 노력','개항과 근대 개혁, 국권 수호 운동'],['일제 식민 통치와 민족 운동','식민 통치와 국내외 독립운동'],['대한민국의 수립과 발전','정부 수립, 전쟁과 산업화'],['민주주의의 발전과 현대 사회','민주화, 평화와 오늘의 과제']]},
+{id:'world',level:'high',name:'세계사와 문화',grade:'고등학교',meta:'세계사 선택 과목',units:[['지역 세계의 형성과 발전','동아시아·인도·서아시아·유럽'],['교류와 교역망의 확대','해상·육상 교역과 문화 교류'],['근대 세계의 형성','르네상스, 종교 개혁과 과학 혁명'],['제국주의와 세계 대전','세계 질서의 변화와 저항'],['현대 세계와 문화 다양성','냉전 이후 국제 사회와 문화']]}
+];
+var esc=function(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
+var root=document.getElementById('courses'),search=document.getElementById('search'),ready=document.getElementById('only-ready'),level='all';
+document.getElementById('course-count').textContent=courses.length;
+document.getElementById('topic-count').textContent=courses.reduce(function(n,c){return n+c.units.length},0);
+function render(){var q=search.value.trim().toLocaleLowerCase();var shown=0;root.innerHTML=courses.map(function(c){if(level!=='all'&&c.level!==level)return '';var units=c.units.filter(function(u){return (!ready.checked||u[2])&&(!q||(c.name+' '+c.grade+' '+c.meta+' '+u.join(' ')).toLocaleLowerCase().indexOf(q)!==-1)});if(!units.length)return '';shown+=units.length;return '<details class="course" open><summary><span class="course-name"><b>'+esc(c.grade+' · '+c.name)+'</b><span>'+esc(c.meta)+'</span></span><span class="course-meta">'+units.length+'개 주제</span></summary><div class="units">'+units.map(function(u){return '<article class="unit"><div><b>'+esc(u[0])+'</b><p>'+esc(u[1])+'</p></div><div class="actions">'+(u[2]?'<a class="action ready" href="'+esc(u[2])+'">단원 자료 보기 ↗</a>':'<span class="planned">자료 준비 중</span>')+'</div></article>'}).join('')+'</div></details>'}).join('');document.getElementById('empty').hidden=shown>0}
+search.addEventListener('input',render);ready.addEventListener('change',render);document.querySelectorAll('[data-level]').forEach(function(b){b.addEventListener('click',function(){level=b.dataset.level;document.querySelectorAll('[data-level]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b))});render()})});render();
 })();
 </script>
 </body>
