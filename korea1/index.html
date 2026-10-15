@@ -19,10 +19,9 @@
 <main class="page" id="main"></main>
 <script src="data.js"></script><script src="slides.js"></script>
 <script src="common.js"></script>
-<script src="map.js"></script>
 <script>
 (function () {
-  const { esc, eraMini, gnb, I } = K1, U = UNIT;
+  const { esc, gnb } = K1, U = UNIT;
   document.getElementById("gnb").innerHTML = gnb([["역사② Ⅰ단원", ""]]);
   const nVid = LESSONS.reduce((s, l) => s + l.videos.length, 0);
   const done = K1.store.get("done", {});
@@ -39,7 +38,6 @@
       </div>
     </li>`;
   };
-  const demo = { own: { gungnae: "G", pyeongyang: "G", hanseong: "S", chungju: "S", ungjin: "B", sabi: "B", gwansan: "S", geumseong: "S", daegaya: "Y", geumgwan: "S" }, cap: { G: "pyeongyang", B: "sabi", S: "geumseong" }, hl: ["hanseong"] };
   document.getElementById("main").innerHTML = `
     <section class="hero">
       <div>
@@ -53,9 +51,6 @@
     <section class="card" style="margin-bottom:20px">
       <div class="sec" style="padding-bottom:6px">
         <div class="sec-h"><h2>차시별 자료</h2><span class="meta">슬라이드에는 영상 · 사료 · 발문 · 생각 열기 질문이 포함됩니다</span></div>
-      </div>
-      <div style="display:grid;grid-template-columns:56px minmax(0,1fr) 210px 120px 28px;gap:16px;padding:0 26px 6px" class="screen-only lg-only" aria-hidden="true">
-        <span></span><span></span><span style="position:relative;height:16px">${["기원전 2000", "1", "600년"].map((t, i) => `<span style="position:absolute;left:${[0, K1.eraX(1), 100][i]}%;transform:translateX(${["0", "-50%", "-100%"][i]});font-size:11px;color:var(--muted);white-space:nowrap">${t}</span>`).join("")}</span><span></span><span></span>
       </div>
       <ol class="lessons">${LESSONS.map(row).join("")}</ol>
     </section>
