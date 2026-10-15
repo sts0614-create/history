@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>수업 게임 · 역사② Ⅰ단원</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="ui.css">
+</head>
+<body>
+<div id="gnb"></div>
+<div class="gshell">
+  <main class="card gpanel" id="stage" aria-live="polite"></main>
+  <aside class="card score" id="score"></aside>
+</div>
+<script src="data.js"></script>
+<script src="common.js"></script>
+<script src="games.js"></script>
+<script>
+(function () {
+  const { esc, I, sfx, shuffle } = K1, $ = id => document.getElementById(id);
+  const gid = K1.qs("g") || "l1", G = GAMES[gid] || GAMES.l1, L = LESSONS[G.lesson - 1];
+  document.title = `${G.title} · ${G.lesson}차시 게임`;
+  $("gnb").innerHTML = K1.gnb([["역사② Ⅰ단원", "index.html"], [`${G.lesson}차시`, `lesson.html?n=${G.lesson}`], [G.title, ""]], `<button class="btn sm ghost" type="button" id="fs">${I.full}<span class="hide-m">전체 화면</span></button>`);
+  $("fs").onclick = () => { try { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen() } catch (e) { } };
+
+  // ── 팀 점수판(이 탭에만 기억) ──
+  const TK = "k1team:" + gid;
+  let teams; try { teams = JSON.parse(sessionStorage.getItem(TK)) } catch (e) { }
+  if (!Array.isArray(teams) || !teams.length) teams = [1, 2, 3, 4].map(i => ({ n: i + "모둠", s: 0 }));
+  const saveT = () => { try { sessionStorage.setItem(TK, JSON.stringify(teams)) } catch (e) { } };
+  let tLeft = 0, tRun = null;
+  const fmt = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+  function drawScore() {
+    const top = Math.max(...teams.map(t => t.s));
+    $("score").innerHTML = `<h3>모둠 점수</h3><div class="teams">${teams.map((t, i) => `<div class="team${t.s === top && top > 0 ? " lead" : ""}"><span class="dot" style="background:${["var(--gg)", "var(--bj)", "var(--sl)", "var(--gy)", "var(--gj)", "var(--brand)", "var(--ok)", "var(--warn)"][i % 8]}"></span><input value="${esc(t.n)}" data-tn="${i}" aria-label="모둠 이름"><button type="button" data-ts="${i}" data-d="-1" aria-label="${esc(t.n)} 1점 빼기">−</button><b class="num">${t.s}</b><button type="button" data-ts="${i}" data-d="1" aria-label="${esc(t.n)} 1점 더하기">+</button></div>`).join("")}</div>
+      <div class="side-tools"><div style="display:flex;gap:6px"><button class="btn sm" type="button" id="tadd" ${teams.length >= 8 ? "disabled" : ""}>모둠 추가</button><button class="btn sm ghost" type="button" id="tdel" ${teams.length <= 2 ? "disabled" : ""}>빼기</button><button class="btn sm ghost" type="button" id="tzero">0점으로</button></div></div>
+      <h3 style="margin-top:20px">타이머</h3><div class="timer" style="flex-wrap:wrap">${[1, 2, 3, 5].map(m => `<button class="btn sm ghost" type="button" data-tm="${m}">${m}분</button>`).join("")}<b class="num${tLeft === 0 && tRun === null ? "" : tLeft === 0 ? " end" : ""}" id="tv">${fmt(tLeft)}</b><button class="btn sm" type="button" id="tgo">${tRun ? "멈춤" : "시작"}</button></div>
+      <p class="muted" style="font-size:12px;margin:16px 0 0">점수는 이 탭에만 남아요. 단계가 끝나면 아래에 나온 점수를 모둠에 바로 줄 수 있어요.</p>
+      <div class="side-tools"><a class="btn sm ghost" href="lesson.html?n=${G.lesson}">${I.left}${G.lesson}차시 자료로</a><button class="btn sm ghost" type="button" id="mute">${K1.store.get("mute", false) ? "소리 켜기" : "소리 끄기"}</button></div>`;
+    $("score").querySelectorAll("[data-ts]").forEach(b => b.onclick = () => { const t = teams[+b.dataset.ts]; t.s += +b.dataset.d; saveT(); if (+b.dataset.d > 0) sfx.tick(); drawScore() });
+    $("score").querySelectorAll("[data-tn]").forEach(x => x.onchange = () => { teams[+x.dataset.tn].n = x.value.trim().slice(0, 12) || (+x.dataset.tn + 1) + "모둠"; saveT(); drawScore(); draw() });
+    $("tadd").onclick = () => { teams.push({ n: teams.length + 1 + "모둠", s: 0 }); saveT(); drawScore(); draw() };
+    $("tdel").onclick = () => { teams.pop(); saveT(); drawScore(); draw() };
+    $("tzero").onclick = () => { if (!confirm("모든 모둠 점수를 0점으로 할까요?")) return; teams.forEach(t => t.s = 0); saveT(); drawScore() };
+    $("score").querySelectorAll("[data-tm]").forEach(b => b.onclick = () => { tLeft = +b.dataset.tm * 60; startT() });
+    $("tgo").onclick = () => tRun ? stopT() : (tLeft > 0 && startT());
+    $("mute").onclick = () => { K1.store.set("mute", !K1.store.get("mute", false)); drawScore() };
+  }
+  function startT() { stopT(); tRun = setInterval(() => { tLeft = Math.max(0, tLeft - 1); const v = $("tv"); if (v) { v.textContent = fmt(tLeft); v.classList.toggle("end", tLeft === 0) } if (tLeft <= 3 && tLeft > 0) sfx.tick(); if (tLeft === 0) { sfx.end(); stopT() } }, 1000); drawScore() }
+  function stopT() { if (tRun) clearInterval(tRun); tRun = null; const g = $("tgo"); if (g) g.textContent = "시작" }
+  const award = pts => pts > 0 ? `<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:12px"><span class="muted" style="font-size:13px">${pts}점을 줄 모둠:</span>${teams.map((t, i) => `<button class="btn sm" type="button" data-aw="${i}" data-p="${pts}">${esc(t.n)}</button>`).join("")}</div>` : "";
+  const bindAward = () => document.querySelectorAll("[data-aw]").forEach(b => b.onclick = () => { teams[+b.dataset.aw].s += +b.dataset.p; saveT(); sfx.good(); drawScore(); document.querySelectorAll("[data-aw]").forEach(x => x.disabled = true); b.textContent += " ✓" });
+
+  // ── 단계 진행 ──
+  let si = -1, S = {}, total = 0;
+  const stage = () => G.stages[si];
+  function head(extra) {
+    return `<div class="ghead"><div><span class="chip brand">${G.lesson}차시 · ${esc(L.title.split(" — ")[0])}</span><h1 style="margin-top:8px">${esc(G.title)}</h1>${extra || ""}</div>
+      <div class="steps">${G.stages.map((s, i) => `<span class="${i === si ? "on" : i < si ? "done" : ""}">${i + 1}. ${esc(s.name)}</span>`).join("")}</div></div>`;
+  }
+  const nextBtn = () => `<button class="btn pri" type="button" id="nx">${si === G.stages.length - 1 ? "결과 보기" : "다음 단계"}${I.right}</button>`;
+  function init() {
+    const s = stage(); S = { checked: false, pts: 0 };
+    if (s.type === "sort") { S.where = {}; S.order = shuffle(s.items.map((_, i) => i)); S.sel = null }
+    if (s.type === "choice") S.pick = new Set();
+    if (s.type === "clue") { S.r = 0; S.open = 1; S.order = shuffle(s.rounds.map((_, i) => i)); S.wrong = new Set(); S.got = false }
+    if (s.type === "fill") { S.val = {}; S.on = "0-1" }
+    if (s.type === "graph" || s.type === "order") { S.seq = []; S.dir = {}; S.order = shuffle(s.items.map((_, i) => i)) }
+  }
+  function draw() {
+    const st = $("stage");
+    if (si < 0) { st.innerHTML = head(`<p>${esc(G.intro)}</p>`) + `<div class="open-task" style="margin-top:8px"><p style="margin:0 0 12px;font-weight:600">이렇게 해요</p><ol style="margin:0;padding-left:20px;color:var(--ink2);line-height:1.9">${G.stages.map(s => `<li><b>${esc(s.name)}</b> — ${esc(s.q || ({ clue: "단서를 열며 어느 나라인지 맞혀요", fill: "빈칸을 누르고 단어 카드를 골라요", graph: "순서대로 누르고 ▲▼를 골라요", order: "일어난 순서대로 눌러요" })[s.type] || "")}</li>`).join("")}</ol><p style="margin:16px 0 0"><button class="btn pri lg" type="button" id="go">게임 시작</button></p></div>`; $("go").onclick = () => { si = 0; total = 0; init(); draw() }; return }
+    if (si >= G.stages.length) { const rank = teams.slice().sort((a, b) => b.s - a.s); st.innerHTML = head() + `<div class="open-task" style="text-align:center;padding:36px 20px"><p class="big-q" style="font-size:28px;margin-bottom:6px">게임 끝</p><p class="muted" style="margin:0 0 20px">자동 채점 점수 합계 ${total}점</p><ol style="list-style:none;padding:0;margin:0 auto;max-width:360px;display:grid;gap:8px">${rank.map((t, i) => `<li class="team${i === 0 ? " lead" : ""}" style="grid-template-columns:32px 1fr auto"><b>${i + 1}</b><span style="text-align:left;font-weight:600">${esc(t.n)}</span><b class="num">${t.s}점</b></li>`).join("")}</ol><p style="margin-top:24px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button class="btn" type="button" id="again">${I.reset}처음부터</button><a class="btn pri" href="lesson.html?n=${G.lesson}">${G.lesson}차시 자료로</a>${LESSONS[G.lesson] ? `<a class="btn" href="lesson.html?n=${G.lesson + 1}">다음 차시</a>` : ""}</p></div>`; sfx.end(); $("again").onclick = () => { si = -1; draw() }; return }
+    const s = stage(); st.innerHTML = head() + R[s.type](s); B[s.type](s); bindAward(); const nx = $("nx"); if (nx) nx.onclick = () => { total += S.total != null ? S.total : (S.pts || 0); si++; if (si < G.stages.length) init(); draw(); window.scrollTo({ top: 0 }) };
+  }
+  const fb = (cls, html) => `<div class="feedback ${cls}">${html}</div>`;
+  const R = {}, B = {};
+  // 분류
+  R.sort = s => {
+    const tok = i => { const it = s.items[i], w = S.where[i], cls = S.checked ? (w === it.a ? " ok" : " bad") : S.sel === i ? " sel" : ""; return `<button class="tok${cls}" type="button" data-tok="${i}" title="${S.checked ? esc(it.why) : ""}">${esc(it.t)}</button>` };
+    const pool = S.order.filter(i => S.where[i] === undefined);
+    const nOk = s.items.filter((it, i) => S.where[i] === it.a).length;
+    return `<p class="big-q">${esc(s.q)}</p><div class="pool" aria-label="아직 나누지 않은 카드">${pool.length ? pool.map(tok).join("") : '<span class="muted" style="align-self:center;font-size:14px">모든 카드를 담았어요.</span>'}</div>
+      <div class="bins">${s.bins.map((b, k) => `<div class="bin${S.sel !== null && !S.checked ? " target" : ""}"><button type="button" data-bin="${k}"${S.sel === null || S.checked ? ' tabindex="-1"' : ""}>${esc(b)} <span class="muted" style="font-weight:500;font-size:12px">${S.order.filter(i => S.where[i] === k).length}</span></button><div class="in">${S.order.filter(i => S.where[i] === k).map(tok).join("")}</div></div>`).join("")}</div>
+      ${S.checked ? fb(nOk === s.items.length ? "ok" : "bad", `<b>${s.items.length}개 중 ${nOk}개 정답</b>${nOk === s.items.length ? " · 모두 맞혔어요." : " · 틀린 카드는 빨간색이에요."}<ul style="margin:8px 0 0;padding-left:18px">${s.items.map((it, i) => S.where[i] !== it.a ? `<li>${esc(it.t)} → <b>${esc(s.bins[it.a])}</b>: ${esc(it.why)}</li>` : "").join("")}</ul>`) + award(S.pts) : ""}
+      <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">${S.checked ? nextBtn() : `<button class="btn pri" type="button" id="ck" ${pool.length ? "disabled" : ""}>채점하기</button><button class="btn ghost" type="button" id="rs">${I.reset}다시 놓기</button>`}</div>`;
+  };
+  B.sort = s => {
+    document.querySelectorAll("[data-tok]").forEach(b => b.onclick = () => { if (S.checked) return; const i = +b.dataset.tok; S.sel = S.sel === i ? null : i; draw() });
+    document.querySelectorAll("[data-bin]").forEach(b => b.onclick = () => { if (S.checked || S.sel === null) return; S.where[S.sel] = +b.dataset.bin; S.sel = null; sfx.tick(); draw() });
+    const ck = $("ck"); if (ck) ck.onclick = () => { S.checked = true; S.pts = s.items.filter((it, i) => S.where[i] === it.a).length; S.pts === s.items.length ? sfx.good() : sfx.bad(); draw() };
+    const rs = $("rs"); if (rs) rs.onclick = () => { S.where = {}; S.sel = null; draw() };
+  };
+  // 선택
+  R.choice = s => {
+    const right = S.checked && s.a.length === S.pick.size && s.a.every(a => S.pick.has(a));
+    return `<p class="big-q">${esc(s.q)}</p>${s.multi ? '<p class="muted" style="margin:-6px 0 12px;font-size:14px">알맞은 것을 모두 고르세요.</p>' : ""}<div class="opts">${s.opts.map((o, i) => { const cls = S.checked ? (s.a.includes(i) ? " ok" : S.pick.has(i) ? " bad" : "") : S.pick.has(i) ? " sel" : ""; return `<button class="opt${cls}" type="button" data-op="${i}" aria-pressed="${S.pick.has(i)}"><span class="k">${"가나다라마바"[i]}</span>${esc(o)}</button>` }).join("")}</div>
+      ${S.checked ? fb(right ? "ok" : "bad", `<b>${right ? "정답!" : "아쉬워요."}</b> ${esc(s.why)}`) + award(S.pts) : ""}
+      <div style="display:flex;gap:8px;margin-top:16px">${S.checked ? nextBtn() : `<button class="btn pri" type="button" id="ck" ${S.pick.size ? "" : "disabled"}>정답 확인</button>`}</div>`;
+  };
+  B.choice = s => {
+    document.querySelectorAll("[data-op]").forEach(b => b.onclick = () => { if (S.checked) return; const i = +b.dataset.op; if (s.multi) S.pick.has(i) ? S.pick.delete(i) : S.pick.add(i); else S.pick = new Set([i]); draw() });
+    const ck = $("ck"); if (ck) ck.onclick = () => { S.checked = true; const ok = s.a.length === S.pick.size && s.a.every(a => S.pick.has(a)); S.pts = ok ? (s.multi ? 3 : 2) : 0; ok ? sfx.good() : sfx.bad(); draw() };
+  };
+  // 단서
+  R.clue = s => {
+    const rd = s.rounds[S.order[S.r]], pts = 6 - S.open;
+    return `<p class="big-q">문제 ${S.r + 1} / ${s.rounds.length} — 어느 나라일까요?</p><ul class="clues">${rd.clues.map((c, i) => i < S.open || S.got ? `<li class="clue"><b>단서 ${i + 1}</b><span>${esc(c)}</span></li>` : `<li class="clue hide"><b>단서 ${i + 1}</b><span>아직 닫혀 있어요</span></li>`).join("")}</ul>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap"><button class="btn" type="button" id="more" ${S.open >= rd.clues.length || S.got ? "disabled" : ""}>단서 하나 더 열기</button><span class="chip ${S.got ? "ok" : "brand"}">${S.got ? `정답 · ${S.pts}점` : `지금 맞히면 ${pts}점`}</span></div>
+      <p class="muted" style="font-size:14px;margin:0 0 8px">모둠이 외친 답을 누르세요.</p><div class="nations">${s.answers.map((a, i) => `<button class="opt${S.got && i === rd.a ? " ok" : S.wrong.has(i) ? " bad" : ""}" type="button" data-na="${i}" ${S.got || S.wrong.has(i) ? "disabled" : ""} style="justify-content:center">${esc(a)}</button>`).join("")}</div>
+      ${S.got ? fb("ok", `<b>${esc(s.answers[rd.a])}</b> — 단서 ${S.open}개로 맞혔어요.`) + award(S.pts) : S.wrong.size ? fb("bad", "아니에요. 단서를 하나 더 열어 볼까요?") : ""}
+      <div style="display:flex;gap:8px;margin-top:16px">${S.got ? (S.r < s.rounds.length - 1 ? `<button class="btn pri" type="button" id="nr">다음 문제${I.right}</button>` : nextBtn()) : ""}</div>`;
+  };
+  B.clue = s => {
+    const rd = s.rounds[S.order[S.r]];
+    const m = $("more"); if (m) m.onclick = () => { S.open++; sfx.tick(); draw() };
+    document.querySelectorAll("[data-na]").forEach(b => b.onclick = () => { const i = +b.dataset.na; if (i === rd.a) { S.got = true; S.pts = 6 - S.open; S.total = (S.total || 0) + S.pts; sfx.good() } else { S.wrong.add(i); sfx.bad() } draw() });
+    const nr = $("nr"); if (nr) nr.onclick = () => { S.r++; S.open = 1; S.wrong = new Set(); S.got = false; draw() };
+  };
+  // 빈칸
+  R.fill = s => {
+    let nOk = 0, nAll = 0;
+    const line = (ln, li) => ln.map((p, pi) => { if (pi % 2 === 0) return esc(p); nAll++; const id = li + "-" + pi, v = S.val[id], ok = v === p; if (S.checked && ok) nOk++; const cls = S.checked ? (ok ? " ok" : " bad") : (S.on === id ? " on" : "") + (v ? " full" : ""); return `<button class="blank${cls}" type="button" data-bl="${id}" aria-label="빈칸">${v ? esc(v) : "　"}</button>${S.checked && !ok ? `<small style="color:var(--bad);font-weight:700">(${esc(p)})</small>` : ""}` }).join("");
+    const html = s.lines.map((ln, li) => `<p class="fl">${line(ln, li)}</p>`).join("");
+    const filled = Object.keys(S.val).length;
+    return `<p class="big-q">빈칸을 누르고, 아래 단어 카드를 골라 채우세요.</p><div class="fills">${html}</div>
+      ${S.checked ? "" : `<div class="pool">${s.bank.map(w => `<button class="tok" type="button" data-w="${esc(w)}">${esc(w)}</button>`).join("")}</div>`}
+      ${S.checked ? fb(nOk === nAll ? "ok" : "bad", `<b>${nAll}칸 중 ${nOk}칸 정답</b>${nOk < nAll ? " · 괄호 안이 정답이에요." : ""}`) + award(S.pts) : ""}
+      <div style="display:flex;gap:8px;margin-top:16px">${S.checked ? nextBtn() : `<button class="btn pri" type="button" id="ck" ${filled ? "" : "disabled"}>채점하기</button><button class="btn ghost" type="button" id="rs">${I.reset}지우기</button>`}</div>`;
+  };
+  B.fill = s => {
+    const ids = []; s.lines.forEach((ln, li) => ln.forEach((p, pi) => { if (pi % 2) ids.push(li + "-" + pi) }));
+    if (!ids.includes(S.on)) S.on = ids[0];
+    document.querySelectorAll("[data-bl]").forEach(b => b.onclick = () => { if (S.checked) return; S.on = b.dataset.bl; draw() });
+    document.querySelectorAll("[data-w]").forEach(b => b.onclick = () => { S.val[S.on] = b.dataset.w; sfx.tick(); const k = ids.indexOf(S.on), nxt = ids.slice(k + 1).concat(ids.slice(0, k)).find(x => !S.val[x]); if (nxt) S.on = nxt; draw() });
+    const ck = $("ck"); if (ck) ck.onclick = () => { S.checked = true; S.pts = ids.filter(id => { const [li, pi] = id.split("-").map(Number); return S.val[id] === s.lines[li][pi] }).length; S.pts === ids.length ? sfx.good() : sfx.bad(); draw() };
+    const rs = $("rs"); if (rs) rs.onclick = () => { S.val = {}; S.on = ids[0]; draw() };
+  };
+  // 순서(+국력 그래프)
+  const truth = s => s.items.map((_, i) => i).sort((a, b) => s.items[a].y - s.items[b].y);
+  function curve(seq, dirOf, w, h, color, label, dy) {
+    const n = seq.length; if (!n) return ""; let v = 0; const vals = [0].concat(seq.map(i => (v += dirOf(i)))), lo = Math.min(...vals), hi = Math.max(...vals), sy = x => h - 24 - (x - lo) / Math.max(hi - lo, 1) * (h - 48), sx = k => 30 + k / n * (w - 140);
+    return `<polyline points="${vals.map((x, k) => sx(k) + "," + sy(x)).join(" ")}" fill="none" stroke="${color}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>${vals.map((x, k) => `<circle cx="${sx(k)}" cy="${sy(x)}" r="4" fill="${color}"/>`).join("")}<text x="${sx(n) + 10}" y="${sy(vals[n]) + 4 + (dy || 0)}" font-size="13" font-weight="700" fill="${color}">${label}</text>`;
+  }
+  R.graph = R.order = s => {
+    const g = s.type === "graph", tr = truth(s), done = S.seq.length === s.items.length;
+    const posOk = i => S.seq.indexOf(i) === tr.indexOf(i), dirOk = i => (S.dir[i] || 0) === s.items[i].d;
+    const card = i => { const it = s.items[i], k = S.seq.indexOf(i), cls = S.checked ? (posOk(i) && (!g || dirOk(i)) ? " ok" : " bad") : k >= 0 ? " picked" : "";
+      return `<div class="ev${cls}" data-ev="${i}" role="button" tabindex="0"><span class="o">${k >= 0 ? k + 1 : ""}</span><span><span class="tx">${esc(it.t)}</span>${S.checked ? `<br><span class="yr">${esc(it.yl || it.y + "년")}${g ? ` · 실제 ${it.d > 0 ? "▲" : "▼"}` : ""}</span>` : ""}</span>${g ? `<span class="updown" onclick="event.stopPropagation()"><button type="button" data-up="${i}" aria-pressed="${S.dir[i] === 1}" aria-label="국력 올라감">▲</button><button type="button" data-dn="${i}" aria-pressed="${S.dir[i] === -1}" aria-label="국력 내려감">▼</button></span>` : ""}</div>` };
+    const nPos = s.items.filter((_, i) => posOk(i)).length, nDir = s.items.filter((_, i) => dirOk(i)).length;
+    const chart = g && S.checked ? `<div class="chartbox"><svg viewBox="0 0 640 220" role="img" aria-label="백제 국력 흐름: 우리 모둠 예상과 실제"><line x1="30" x2="610" y1="196" y2="196" stroke="var(--line2)"/>${curve(S.seq, i => S.dir[i] || 0, 640, 220, "var(--muted)", "우리 예상", -16)}${curve(tr, i => s.items[i].d, 640, 220, "var(--bj)", "실제 흐름", 10)}</svg><p class="muted" style="font-size:12px;margin:4px 0 0">사건마다 ▲은 한 칸 위, ▼은 한 칸 아래로 이은 흐름이에요(국력의 크기를 잰 것은 아니에요).</p></div>` : "";
+    return `<p class="big-q">${g ? "일어난 순서대로 카드를 누르고, 백제의 힘이 올라갔으면 ▲, 내려갔으면 ▼를 고르세요." : "일어난 순서대로 카드를 누르세요. 잘못 눌렀으면 그 카드를 다시 누르면 빠져요."}</p>
+      <div class="seq">${S.order.map(card).join("")}</div>${chart}
+      ${S.checked ? fb(nPos === s.items.length && (!g || nDir === s.items.length) ? "ok" : "bad", `<b>순서 ${nPos}/${s.items.length}${g ? ` · 방향 ${nDir}/${s.items.length}` : ""}</b> · 카드 아래에 실제 연도가 나왔어요.`) + award(S.pts) : ""}
+      <div style="display:flex;gap:8px;margin-top:16px">${S.checked ? nextBtn() : `<button class="btn pri" type="button" id="ck" ${done && (!g || s.items.every((_, i) => S.dir[i])) ? "" : "disabled"}>채점하기</button><button class="btn ghost" type="button" id="rs">${I.reset}다시 하기</button>`}</div>`;
+  };
+  B.graph = B.order = s => {
+    document.querySelectorAll("[data-ev]").forEach(b => { const f = () => { if (S.checked) return; const i = +b.dataset.ev, k = S.seq.indexOf(i); if (k >= 0) S.seq.splice(k, 1); else { S.seq.push(i); sfx.tick() } draw() }; b.onclick = f; b.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); f() } } });
+    document.querySelectorAll("[data-up]").forEach(b => b.onclick = () => { if (!S.checked) { S.dir[+b.dataset.up] = 1; draw() } });
+    document.querySelectorAll("[data-dn]").forEach(b => b.onclick = () => { if (!S.checked) { S.dir[+b.dataset.dn] = -1; draw() } });
+    const ck = $("ck"); if (ck) ck.onclick = () => { S.checked = true; const tr = truth(s); S.pts = s.items.filter((_, i) => S.seq.indexOf(i) === tr.indexOf(i)).length + (s.type === "graph" ? s.items.filter((it, i) => S.dir[i] === it.d).length : 0); sfx.good(); draw() };
+    const rs = $("rs"); if (rs) rs.onclick = () => { S.seq = []; S.dir = {}; draw() };
+  };
+  // 열린 과제
+  R.open = s => `<div class="open-task"><span class="chip warn">모둠 과제 · 교사가 점수</span><p class="big-q" style="margin-top:12px">${esc(s.q)}</p><ul style="margin:0 0 14px;padding-left:20px;color:var(--ink2);line-height:1.9">${s.tips.map(t => `<li>${esc(t)}</li>`).join("")}</ul><textarea placeholder="모둠의 생각을 적어 TV로 함께 보세요(저장되지 않아요)" aria-label="모둠 메모"></textarea><p class="muted" style="font-size:13px;margin:10px 0 0">오른쪽 타이머로 시간을 재고, 잘한 모둠에 + 점수를 주세요.</p></div><div style="display:flex;gap:8px;margin-top:16px">${nextBtn()}</div>`;
+  B.open = () => { };
+
+  drawScore(); draw();
+})();
+</script>
+</body>
+</html>

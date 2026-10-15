@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>한강 쟁탈전 371–562 · 시뮬레이션</title>
+<meta name="description" content="근초고왕부터 진흥왕까지, 왕의 자리에서 11번의 결정을 내리고 실제 역사와 비교하는 한강 쟁탈전 시뮬레이션">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="ui.css">
+<style>
+.simtop{max-width:1280px;margin:0 auto;padding:20px 20px 0}
+.years{display:flex;gap:4px;overflow-x:auto;padding:4px 0 2px;scrollbar-width:thin}
+.yr{flex:1 0 auto;min-width:64px;height:40px;border-radius:8px;border:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px;color:var(--muted);line-height:1.2}
+.yr b{font-size:14px;color:var(--ink2);font-variant-numeric:tabular-nums}
+.yr.on{border-color:var(--ink);background:var(--ink);color:var(--surface)} .yr.on b{color:var(--surface)}
+.yr.done{background:var(--sunk)}
+.yr i{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:3px}
+.simgrid{max-width:1280px;margin:0 auto;padding:16px 20px 48px;display:grid;grid-template-columns:420px minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:1000px){.simgrid{grid-template-columns:1fr}}
+.mapcard{position:sticky;top:72px;overflow:hidden}
+@media (max-width:1000px){.mapcard{position:static;order:2}.mapbox{max-width:440px;margin:0 auto}}
+.mapcard .mh{display:flex;justify-content:space-between;align-items:flex-end;padding:16px 18px 10px}
+.mapcard .yearbig{font-size:44px;font-weight:800;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.mapcard .yearbig small{font-size:15px;font-weight:600;color:var(--muted);letter-spacing:0;margin-left:2px}
+.han{text-align:right;font-size:12px;color:var(--muted)}
+.han b{display:flex;align-items:center;gap:6px;justify-content:flex-end;font-size:16px;color:var(--ink)}
+.mapbox svg{display:block;width:100%;height:auto}
+.mteams{border-top:1px solid var(--line);padding:14px 18px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.mt{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r-sm);background:var(--sunk);font-size:13px;font-weight:600;min-width:0}
+.mt span:not(.dot){flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mt b{font-size:18px;font-variant-numeric:tabular-nums}
+.mt button{width:26px;height:26px;border-radius:6px;border:1px solid var(--line2);background:var(--surface);cursor:pointer;font-weight:700;flex:none}
+.scene{padding:26px}
+.who{display:inline-flex;align-items:center;gap:8px;height:30px;padding:0 12px 0 10px;border-radius:999px;font-weight:700;font-size:14px;color:#fff}
+.scene h2{margin:14px 0 8px;font-size:clamp(24px,2.6vw,32px);font-weight:800;letter-spacing:-.03em;line-height:1.25}
+.sit{font-size:16px;line-height:1.7;color:var(--ink2);max-width:62ch;margin:0}
+.ask{margin:22px 0 12px;font-size:18px;font-weight:700}
+.choice{border:1px solid var(--line2);border-radius:var(--r);background:var(--surface);padding:14px 16px;display:grid;gap:10px}
+.choice+.choice{margin-top:10px}
+.choice .ct{display:flex;gap:12px;align-items:flex-start;font-size:16px;font-weight:600;line-height:1.5}
+.choice .ct .k{width:30px;height:30px;border-radius:8px;background:var(--sunk);display:grid;place-items:center;font-weight:800;flex:none;font-size:14px}
+.choice .vt{display:flex;flex-wrap:wrap;gap:6px;padding-left:42px}
+.vbtn{height:30px;padding:0 10px;border-radius:999px;border:1px solid var(--line2);background:var(--surface);font-size:12.5px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.vbtn[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.vbtn:disabled{cursor:default}
+.choice.hist{border-color:var(--ok);background:var(--ok-soft)}
+.choice.hist .k{background:var(--ok);color:#fff}
+.choice .nt{padding-left:42px;font-size:14px;color:var(--ink2);line-height:1.6}
+.histtag{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:6px;background:var(--ok);color:#fff;font-size:12px;font-weight:700;margin-left:6px;vertical-align:2px}
+.result{margin-top:18px;border-radius:var(--r);background:var(--sunk);padding:16px 18px}
+.result .rl{font-size:13px;font-weight:700;color:var(--brand-strong);margin-bottom:6px}
+.result p{margin:0;font-size:16px;line-height:1.7}
+.bar2{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:20px}
+.vcount{font-size:13px;color:var(--muted)}
+.intro{max-width:820px}
+.intro ol{margin:0;padding-left:20px;line-height:1.9;color:var(--ink2)}
+.sum td:nth-child(3),.sum td:nth-child(4){min-width:180px}
+</style>
+</head>
+<body>
+<div id="gnb"></div>
+<div class="simtop"><div class="years" id="years" aria-label="장면 진행"></div></div>
+<div class="simgrid">
+  <section class="card mapcard" id="mapcard" aria-label="지도"></section>
+  <main class="card scene" id="scene" aria-live="polite"></main>
+</div>
+<script src="data.js"></script>
+<script src="common.js"></script>
+<script src="map.js"></script>
+<script src="sim-data.js"></script>
+<script>
+(function () {
+  const { esc, I, sfx } = K1, $ = id => document.getElementById(id), M = K1MAP, R = SIM.rounds;
+  $("gnb").innerHTML = K1.gnb([["역사② Ⅰ단원", "index.html"], ["6차시", "lesson.html?n=6"], ["한강 쟁탈전", ""]], `<button class="btn sm ghost" type="button" id="fs">${I.full}<span class="hide-m">전체 화면</span></button>`);
+  $("fs").onclick = () => { try { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen() } catch (e) { } };
+  const KEY = "k1sim";
+  let S; try { S = JSON.parse(sessionStorage.getItem(KEY)) } catch (e) { }
+  if (!S || !Array.isArray(S.teams)) S = { r: -1, phase: "vote", votes: {}, teams: [1, 2, 3, 4].map(i => ({ n: i + "모둠", s: 0 })) };
+  const save = () => { try { sessionStorage.setItem(KEY, JSON.stringify(S)) } catch (e) { } };
+  const TC = ["var(--gg)", "var(--bj)", "var(--sl)", "var(--gy)", "var(--gj)", "var(--brand)", "var(--ok)", "var(--warn)"];
+  // 지도 상태: 공개된 장면까지 결과를 차례로 반영
+  function mapState(upto) {
+    const st = { own: { ...SIM.start.own }, cap: { ...SIM.start.cap }, show: Object.keys(M.NODES).filter(k => k !== "gwansan") };
+    for (let i = 0; i <= upto && i < R.length; i++) { Object.assign(st.own, R[i].own || {}); Object.assign(st.cap, R[i].cap || {}); (R[i].show || []).forEach(k => st.show.includes(k) || st.show.push(k)) }
+    return st;
+  }
+  function drawYears() {
+    $("years").innerHTML = R.map((x, i) => `<span class="yr${i === S.r ? " on" : i < S.r || (i === S.r && S.phase === "reveal") ? " done" : ""}" title="${esc(x.who)} — ${esc(x.title)}"><b>${x.y}</b><span><i style="background:${M.COL[x.k]}"></i>${M.NAME[x.k]}</span></span>`).join("");
+    const on = $("years").querySelector(".on"); if (on) on.scrollIntoView({ block: "nearest", inline: "center" });
+  }
+  function drawMap() {
+    const end = S.r >= R.length, upto = S.r < 0 ? -1 : end ? R.length - 1 : S.phase === "reveal" ? S.r : S.r - 1, st = mapState(upto), x = R[S.r];
+    if (x) st.hl = x.hl; const y = S.r < 0 ? 346 : end ? R[R.length - 1].y : x.y, han = st.own.hanseong;
+    $("mapcard").innerHTML = `<div class="mh"><div class="yearbig">${y}<small>년${S.r < 0 ? " 무렵" : ""}</small></div><div class="han">한강 하류의 주인<b><span class="dot" style="background:${M.COL[han]};width:10px;height:10px"></span>${M.NAME[han]}</b></div></div>
+      <div class="mapbox">${M.svg(st, { label: `${y}년 무렵 한강 유역 개념 지도` })}</div>
+      <div class="mteams">${S.teams.map((t, i) => `<div class="mt"><span class="dot" style="background:${TC[i % 8]}"></span><span>${esc(t.n)}</span><b>${t.s}</b><button type="button" data-tp="${i}" aria-label="${esc(t.n)} 근거 점수 1점">+</button></div>`).join("")}</div>
+      <p class="muted" style="font-size:12px;margin:0;padding:0 18px 14px">개념도이며 실제 축척·국경이 아닙니다. + 는 근거를 잘 말한 모둠에게 주는 점수예요.</p>`;
+    $("mapcard").querySelectorAll("[data-tp]").forEach(b => b.onclick = () => { S.teams[+b.dataset.tp].s++; save(); sfx.tick(); drawMap() });
+  }
+  function drawIntro() {
+    $("scene").innerHTML = `<div class="intro"><span class="chip brand">6차시 시뮬레이션 · 약 20분</span><h2>한강 쟁탈전 371–562</h2>
+      <p class="sit">근초고왕부터 진흥왕까지, 11번의 갈림길에서 왕의 자리에 앉아 봅니다. 모둠마다 선택을 고르고, 실제 역사가 어느 길로 갔는지 확인하며 지도에서 한강의 주인이 바뀌는 과정을 따라갑니다.</p>
+      <div class="result" style="margin-top:20px"><div class="rl">진행 방법</div><ol><li>장면을 읽고 모둠별로 30초 상의합니다.</li><li>모둠이 고른 선택지에 모둠 버튼을 누릅니다.</li><li><b>실제 역사 보기</b>를 누르면 실제로 고른 길에 투표한 모둠이 1점을 얻습니다.</li><li>실제와 다른 길을 고른 모둠도 근거가 좋으면 지도 아래 + 로 1점을 줍니다.</li></ol></div>
+      <div class="bar2"><label class="vcount" for="tn">모둠 수</label><select id="tn" style="height:40px;border-radius:8px;border:1px solid var(--line2);background:var(--surface);color:var(--ink);font:600 14px var(--f);padding:0 10px">${[2, 3, 4, 5, 6, 7, 8].map(v => `<option${v === S.teams.length ? " selected" : ""}>${v}</option>`).join("")}</select>
+      <button class="btn pri lg" type="button" id="go">${I.map}시작하기</button>${S.r >= 0 ? `<button class="btn lg" type="button" id="resume">이어서 하기 (${R[Math.min(S.r, R.length - 1)].y}년)</button>` : ""}</div></div>`;
+    $("tn").onchange = () => { const v = +$("tn").value; while (S.teams.length < v) S.teams.push({ n: S.teams.length + 1 + "모둠", s: 0 }); S.teams.length = v; save(); drawMap() };
+    $("go").onclick = () => { S.r = 0; S.phase = "vote"; S.votes = {}; S.teams.forEach(t => t.s = 0); save(); draw() };
+    const rs = $("resume"); if (rs) rs.onclick = () => { if (S.r >= R.length) S.r = R.length; draw() };
+  }
+  function drawScene() {
+    const x = R[S.r], V = S.votes[S.r] || {}, rev = S.phase === "reveal", nV = Object.keys(V).length;
+    const hi = x.opts.findIndex(o => o.h);
+    $("scene").innerHTML = `<span class="who" style="background:${M.COL[x.k]}">${esc(x.who)}</span><span class="muted num" style="margin-left:10px;font-size:14px">${S.r + 1} / ${R.length}</span>
+      <h2>${x.y}년 · ${esc(x.title)}</h2><p class="sit">${esc(x.sit)}</p><p class="ask">${esc(x.q)}</p>
+      ${x.opts.map((o, i) => `<div class="choice${rev && o.h ? " hist" : ""}"><div class="ct"><span class="k">${"가나다"[i]}</span><span>${esc(o.t)}${rev && o.h ? '<span class="histtag">실제 역사</span>' : ""}</span></div>
+        <div class="vt">${S.teams.map((t, ti) => `<button class="vbtn" type="button" data-v="${ti}" data-o="${i}" aria-pressed="${V[ti] === i}" ${rev ? "disabled" : ""}><span class="dot" style="background:${TC[ti % 8]}"></span>${esc(t.n)}</button>`).join("")}</div>
+        ${rev && !o.h && o.note ? `<div class="nt">${esc(o.note)}</div>` : ""}</div>`).join("")}
+      ${rev ? `<div class="result"><div class="rl">실제 역사</div><p>${esc(x.res)}</p></div>` : ""}
+      <div class="bar2">${rev ? `<span class="vcount">${(() => { const w = S.teams.filter((_, ti) => V[ti] === hi).map(t => t.n); return w.length ? `${w.map(esc).join(", ")} +1점` : "실제 역사를 고른 모둠이 없어요." })()}</span><span class="sp" style="flex:1"></span>${S.r > 0 ? `<button class="btn ghost" type="button" id="back">${I.left}이전 장면</button>` : ""}<button class="btn pri lg" type="button" id="next">${S.r === R.length - 1 ? "결과 보기" : "다음 장면"}${I.right}</button>`
+        : `<span class="vcount">${nV} / ${S.teams.length} 모둠 투표</span><span class="sp" style="flex:1"></span><button class="btn pri lg" type="button" id="reveal" ${nV ? "" : "disabled"}>실제 역사 보기</button>`}</div>`;
+    $("scene").querySelectorAll("[data-v]").forEach(b => b.onclick = () => { const ti = +b.dataset.v, oi = +b.dataset.o; (S.votes[S.r] ||= {}); if (S.votes[S.r][ti] === oi) delete S.votes[S.r][ti]; else S.votes[S.r][ti] = oi; sfx.tick(); save(); drawScene() });
+    const rv = $("reveal"); if (rv) rv.onclick = () => { S.phase = "reveal"; let any = 0; S.teams.forEach((t, ti) => { if (V[ti] === hi) { t.s++; any = 1 } }); any ? sfx.good() : sfx.bad(); save(); draw() };
+    const nx = $("next"); if (nx) nx.onclick = () => { S.r++; S.phase = "vote"; save(); draw(); window.scrollTo({ top: 0, behavior: "smooth" }) };
+    const bk = $("back"); if (bk) bk.onclick = () => { S.r--; S.phase = "reveal"; save(); draw() };
+  }
+  function drawEnd() {
+    const rank = S.teams.map((t, i) => ({ ...t, i })).sort((a, b) => b.s - a.s);
+    const most = r => { const c = {}; Object.values(S.votes[r] || {}).forEach(o => c[o] = (c[o] || 0) + 1); const e = Object.entries(c).sort((a, b) => b[1] - a[1])[0]; return e ? +e[0] : -1 };
+    const match = R.filter((x, r) => most(r) === x.opts.findIndex(o => o.h)).length;
+    $("scene").innerHTML = `<span class="chip ok">시뮬레이션 끝</span><h2>562년, 한강은 신라의 것이 되었습니다</h2>
+      <p class="sit">우리 반이 가장 많이 고른 선택이 실제 역사와 같았던 장면은 <b>${R.length}개 중 ${match}개</b>입니다.</p>
+      <div class="result" style="margin-top:18px"><div class="rl">모둠 순위</div><ol style="margin:0;padding-left:20px;line-height:1.9">${rank.map(t => `<li><b>${esc(t.n)}</b> — ${t.s}점</li>`).join("")}</ol></div>
+      <h3 style="margin:26px 0 10px;font-size:17px">장면별로 돌아보기</h3>
+      <div style="overflow-x:auto"><table class="tbl sum"><thead><tr><th>연도</th><th>왕</th><th>우리 반의 선택</th><th>실제 역사</th></tr></thead><tbody>${R.map((x, r) => { const m = most(r), h = x.opts.findIndex(o => o.h); return `<tr><td class="num">${x.y}</td><td>${esc(x.who)}</td><td>${m < 0 ? '<span class="muted">투표 없음</span>' : `${m === h ? '<span class="chip ok">같음</span> ' : ""}${esc(x.opts[m].t)}`}</td><td>${esc(x.opts[h].t)}</td></tr>` }).join("")}</tbody></table></div>
+      <h3 style="margin:26px 0 10px;font-size:17px">함께 생각해 볼 질문</h3>
+      <div class="think">${SIM.debrief.map((t, i) => `<div class="tq"><span class="n">${i + 1}</span><p>${esc(t)}</p></div>`).join("")}</div>
+      <div class="bar2"><button class="btn" type="button" id="again">${I.reset}처음부터</button><a class="btn pri" href="lesson.html?n=6">6차시 자료로</a><a class="btn" href="lesson.html?n=7">7차시로</a></div>`;
+    sfx.end();
+    $("again").onclick = () => { S.r = -1; S.phase = "vote"; S.votes = {}; S.teams.forEach(t => t.s = 0); save(); draw() };
+  }
+  function draw() { drawYears(); drawMap(); if (S.r < 0) drawIntro(); else if (S.r >= R.length) drawEnd(); else drawScene() }
+  document.addEventListener("keydown", e => { if (e.target.closest("input,select,textarea")) return; if (e.key === "ArrowRight" || e.key === "Enter") { const b = $("reveal") && !$("reveal").disabled ? $("reveal") : $("next"); if (b) { e.preventDefault(); b.click() } } });
+  if (S.r >= 0 && S.r < R.length) { drawYears(); drawMap(); drawIntro() } else draw();
+})();
+</script>
+</body>
+</html>

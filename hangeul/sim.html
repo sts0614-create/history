@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>훈민정음 창제 원리 실험실 · 역사 수업 자료</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&family=Nanum+Myeongjo:wght@700;800&display=swap">
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+:root{--hist:#9a3b2c} @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--hist:#f08a72}}
+body{--area:var(--hist)} .area-dot{background:var(--hist)}
+.seg button[aria-pressed="true"]{background:var(--hist);color:#fff}
+.stagebox{padding:16px;display:flex;flex-direction:column;gap:14px;min-height:430px}
+.jamo{font-family:"Nanum Myeongjo",serif;font-weight:800}
+.keys{display:flex;gap:8px;flex-wrap:wrap}
+.key{min-width:54px;height:54px;font:800 28px "Nanum Myeongjo",serif;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;cursor:pointer}
+.key[aria-pressed="true"],.key.on{background:var(--hist);color:#fff;border-color:var(--hist)}
+.key:disabled{opacity:.35;cursor:default}
+.key.sm{min-width:44px;height:44px;font-size:22px}
+.giant{font:800 clamp(90px,14vw,160px)/1 "Nanum Myeongjo",serif;text-align:center;color:var(--hist)}
+svg.mouth{width:100%;max-width:440px;height:auto;align-self:center}
+.rows{display:flex;flex-direction:column;gap:10px}
+.row{display:grid;grid-template-columns:110px 1fr;gap:10px;align-items:center;background:var(--soft);border-radius:10px;padding:8px 12px}
+.row .nm{font-size:13px;color:var(--muted)} .row .nm b{display:block;color:var(--ink);font-size:15px}
+.chain{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.chain .arrow{color:var(--muted);font-size:13px}
+.tile{width:54px;height:54px;border-radius:10px;display:grid;place-items:center;font:800 30px "Nanum Myeongjo",serif;background:var(--surface);border:1px solid var(--line)}
+.tile.base{border:2px solid var(--hist);color:var(--hist)}
+.tile.hide{color:transparent;border-style:dashed}
+.tile.odd{background:transparent;border-style:dotted}
+.screen{font:800 64px "Nanum Myeongjo",serif;min-height:80px;text-align:center;letter-spacing:.05em;background:var(--soft);border-radius:12px;padding:8px}
+.seq{font:600 20px var(--f-mono);text-align:center;color:var(--muted);min-height:28px}
+.found{display:flex;gap:6px;flex-wrap:wrap}
+.found span{width:40px;height:40px;border-radius:8px;display:grid;place-items:center;font:800 22px "Nanum Myeongjo",serif;border:1px dashed var(--line);color:var(--muted)}
+.found span.got{border:1px solid var(--hist);background:var(--hist);color:#fff}
+.target{font:800 54px "Nanum Myeongjo",serif;text-align:center;letter-spacing:.15em}
+.target .done{color:var(--hist)} .target .now{text-decoration:underline;text-decoration-thickness:4px;text-underline-offset:10px}
+.lbl{font-size:12px;color:var(--muted);margin:2px 0 -6px}
+.quote{font-family:"Nanum Myeongjo",serif;font-size:19px;line-height:1.9;background:var(--soft);border-left:5px solid var(--hist);border-radius:0 10px 10px 0;padding:14px 18px;margin:0}
+.quote mark{background:linear-gradient(transparent 55%,#f7d58b 55%);color:inherit;cursor:pointer}
+.tl{display:flex;flex-direction:column;gap:0;border-left:3px solid var(--hist);margin-left:8px}
+.tl div{position:relative;padding:6px 0 10px 18px;font-size:14px}
+.tl div::before{content:"";position:absolute;left:-8px;top:10px;width:13px;height:13px;border-radius:50%;background:var(--surface);border:3px solid var(--hist)}
+.tl b{font-family:var(--f-mono);color:var(--hist);margin-right:6px}
+.msg{font-weight:700;text-align:center;min-height:24px}
+.ok{color:var(--bio)} .no{color:var(--hot)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="topbar"><a class="brand" href="../index.html">역사 수업 실험실</a><span class="sep">›</span><span>조선 전기 민족 문화</span><span class="sep">›</span><span>훈민정음</span></nav>
+  <header class="page">
+    <div>
+      <div class="eyebrow"><i class="area-dot"></i>중학교 역사② · 조선 전기의 문화 발달 <span class="code">세종 · 1443 창제 / 1446 반포</span></div>
+      <h1>훈민정음 창제 원리 실험실</h1>
+    </div>
+    <div class="seg" role="group" aria-label="활동 고르기">
+      <button type="button" data-mode="organ">1. 소리 나는 모양</button>
+      <button type="button" data-mode="stroke">2. 획을 더하다</button>
+      <button type="button" data-mode="vowel">3. 하늘·땅·사람</button>
+      <button type="button" data-mode="game">4. 글자 조합 게임</button>
+      <button type="button" data-mode="source">5. 사료로 읽기</button>
+    </div>
+  </header>
+  <div class="main">
+    <section class="panel stagebox" id="stage" aria-live="polite"></section>
+    <aside class="panel ledger"><div class="stats" id="stats"></div><p class="explain" id="explain"></p><p class="note" id="tip"></p></aside>
+  </div>
+  <section aria-label="생각해 보기">
+    <h2 style="margin-bottom:10px">생각해 보기</h2>
+    <div class="think">
+      <details class="q"><summary><span class="qnum">Q1</span>한자를 쓰던 시대에 세종은 왜 새 문자를 만들었을까?</summary><p>우리말을 한자로 적기 어려워 백성이 자기 뜻을 글로 나타내지 못했기 때문이에요. 서문에는 우리말이 중국과 다르다는 자주 정신, 어리석은 백성을 불쌍히 여기는 애민 정신, 날마다 쓰기 편하게 한다는 실용 정신이 드러나요.</p></details>
+      <details class="q"><summary><span class="qnum">Q2</span>창제 원리가 기록된 책이 있다는 것은 왜 특별할까?</summary><p>세계의 문자 중 만든 사람, 만든 때, 만든 원리를 기록한 책(『훈민정음』 해례본)이 남아 있는 경우는 매우 드물어요. 해례본은 1940년 발견되어 국보이자 1997년 유네스코 세계 기록 유산이 되었어요.</p></details>
+      <details class="q"><summary><span class="qnum">Q3</span>스마트폰 '천지인' 자판과 훈민정음은 어떤 관계일까?</summary><p>천지인 자판은 모음을 ·(하늘), ㅡ(땅), ㅣ(사람) 세 개로 조합하는 훈민정음 모음 창제 원리를 그대로 이용해요. 500여 년 전의 원리가 오늘날 디지털 입력에도 쓰이고 있어요.</p></details>
+    </div>
+  </section>
+  <footer class="site">역사 수업 실험실 · 2022 개정 교육과정 중학교 역사 · 사료 번역은 『훈민정음』 어제 서문의 일반적인 현대어 풀이</footer>
+</div>
+<script>
+(() => {
+const $ = id => document.getElementById(id), stage = $('stage'), stats = $('stats'), ex = $('explain'), tip = $('tip');
+let AC = null; const tone = (f, d = .12, t0 = 0) => { try { AC = AC || new (window.AudioContext || window.webkitAudioContext)(); const o = AC.createOscillator(), g = AC.createGain(), t = AC.currentTime + t0; o.frequency.value = f; o.type = 'triangle'; g.gain.setValueAtTime(.15, t); g.gain.exponentialRampToValueAtTime(.001, t + d); o.connect(g).connect(AC.destination); o.start(t); o.stop(t + d); } catch (e) {} };
+const good = () => { tone(660); tone(990, .2, .1); }, bad = () => tone(180, .25);
+const statHTML = a => a.map(([v, k]) => `<div><b>${v}</b><span>${k}</span></div>`).join('');
+
+/* ===== 1. 발음 기관 상형 ===== */
+const ORG = {
+  'ㄱ': {grp: '어금닛소리 (아음)', how: '혀뿌리가 목구멍을 막는 모양', tongue: 'M78 202 Q170 205 222 160 Q252 148 262 168 Q268 220 262 292', hi: 'tongue'},
+  'ㄴ': {grp: '혓소리 (설음)', how: '혀끝이 윗잇몸에 닿는 모양', tongue: 'M84 157 Q96 150 120 172 Q190 210 245 200 Q266 222 262 292', hi: 'tongue'},
+  'ㅁ': {grp: '입술소리 (순음)', how: '입(입술)의 모양', tongue: 'M84 200 Q150 172 238 190 Q264 214 262 292', hi: 'lips'},
+  'ㅅ': {grp: '잇소리 (치음)', how: '이(치아)의 모양', tongue: 'M86 190 Q150 168 238 190 Q264 214 262 292', hi: 'teeth'},
+  'ㅇ': {grp: '목소리 (후음)', how: '목구멍의 모양', tongue: 'M84 200 Q150 172 238 190 Q264 214 262 292', hi: 'throat'}};
+let organ = 'ㄱ';
+function drawOrgan(){ const o = ORG[organ], hc = 'var(--hist)', lipsClosed = organ === 'ㅁ';
+  stage.innerHTML = `<div class="keys" role="group" aria-label="기본 자음">${Object.keys(ORG).map(k => `<button type="button" class="key" data-k="${k}" aria-pressed="${k === organ}">${k}</button>`).join('')}</div>
+  <div style="display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:12px;align-items:center">
+  <svg class="mouth" viewBox="0 0 380 340" role="img" aria-label="${organ} 소리를 낼 때 발음 기관의 모양">
+    <path d="M190 18 Q110 14 72 70 Q60 92 38 116 Q48 128 62 132 Q58 142 52 150 Q60 158 56 168 Q50 178 56 190 Q62 200 58 214 Q66 236 92 250 Q120 258 150 254 L170 336" fill="none" stroke="var(--muted)" stroke-width="2"/>
+    <path d="M300 30 Q330 120 300 190 L300 336" fill="none" stroke="var(--muted)" stroke-width="2"/>
+    <path d="M70 140 Q150 112 228 132 Q262 140 275 168" fill="none" stroke="var(--ink)" stroke-width="3"/>
+    <text x="150" y="112" font-size="12" fill="var(--muted)" text-anchor="middle">입천장</text>
+    <path d="M62 ${lipsClosed ? 178 : 150} Q48 ${lipsClosed ? 172 : 158} 58 ${lipsClosed ? 180 : 168} M60 ${lipsClosed ? 180 : 196} Q46 ${lipsClosed ? 186 : 204} 62 214" fill="none" stroke="${o.hi === 'lips' ? hc : 'var(--ink)'}" stroke-width="${o.hi === 'lips' ? 7 : 3}" stroke-linecap="round"/>
+    <rect x="70" y="142" width="12" height="20" rx="3" fill="${o.hi === 'teeth' ? hc : 'var(--surface)'}" stroke="var(--ink)" stroke-width="2"/>
+    <rect x="72" y="194" width="11" height="18" rx="3" fill="${o.hi === 'teeth' ? hc : 'var(--surface)'}" stroke="var(--ink)" stroke-width="2"/>
+    <path d="${o.tongue}" fill="none" stroke="${o.hi === 'tongue' ? hc : '#d9776b'}" stroke-width="${o.hi === 'tongue' ? 9 : 7}" stroke-linecap="round"/>
+    <text x="150" y="232" font-size="12" fill="var(--muted)" text-anchor="middle">혀</text>
+    <ellipse cx="282" cy="292" rx="16" ry="22" fill="${o.hi === 'throat' ? hc : 'none'}" fill-opacity=".35" stroke="${o.hi === 'throat' ? hc : 'var(--muted)'}" stroke-width="${o.hi === 'throat' ? 4 : 2}"/>
+    <text x="320" y="296" font-size="12" fill="var(--muted)">목구멍</text>
+  </svg>
+  <div><div class="giant jamo">${organ}</div><p style="text-align:center;margin:6px 0 0;font-weight:700">${o.how}</p><p class="note" style="text-align:center">${o.grp}</p></div></div>`;
+  stage.querySelectorAll('[data-k]').forEach(b => b.onclick = () => { organ = b.dataset.k; tone(440 + Object.keys(ORG).indexOf(organ) * 80); drawOrgan(); });
+  stats.innerHTML = statHTML([['5자', '기본 자음'], ['상형', '창제 원리'], ['17자', '초성 전체 (창제 당시)'], ['1443', '창제 연도']]);
+  ex.innerHTML = '<b>상형(象形)의 원리</b>: 훈민정음의 기본 자음 다섯 글자는 소리를 낼 때 <b>발음 기관의 모양</b>을 본떠 만들었어요. 글자 모양만 봐도 어디에서 나는 소리인지 알 수 있는, 세계적으로 드문 과학적 문자예요.';
+  tip.textContent = '직접 소리 내 보기: "그"를 발음하면 혀뿌리가 목구멍 쪽을 막고, "느"를 발음하면 혀끝이 윗잇몸에 닿아요. 거울을 보며 ㅁ의 입 모양도 확인해 보세요.'; }
+
+/* ===== 2. 가획 ===== */
+const ROWS = [['아음', '어금닛소리', ['ㄱ', 'ㅋ'], 'ㆁ'], ['설음', '혓소리', ['ㄴ', 'ㄷ', 'ㅌ'], 'ㄹ'], ['순음', '입술소리', ['ㅁ', 'ㅂ', 'ㅍ'], ''], ['치음', '잇소리', ['ㅅ', 'ㅈ', 'ㅊ'], 'ㅿ'], ['후음', '목소리', ['ㅇ', 'ㆆ', 'ㅎ'], '']];
+let shown = ROWS.map(() => 1), oddShown = false;
+function drawStroke(){ const total = shown.reduce((a, b) => a + b, 0) + (oddShown ? 3 : 0);
+  stage.innerHTML = `<div class="rows">${ROWS.map((r, i) => `<div class="row"><div class="nm"><b>${r[1]}</b>${r[0]}</div><div class="chain">${r[2].map((c, k) => (k ? '<span class="arrow">+획 →</span>' : '') + `<span class="tile jamo ${k ? '' : 'base'} ${k < shown[i] ? '' : 'hide'}">${c}</span>`).join('')}${r[2].length > 1 ? `<button type="button" class="btn" data-r="${i}" ${shown[i] >= r[2].length ? 'disabled' : ''}>획 더하기</button>` : ''}${r[3] ? `<span class="arrow" style="margin-left:6px">이체자</span><span class="tile jamo odd ${oddShown ? '' : 'hide'}">${r[3]}</span>` : ''}</div></div>`).join('')}</div>
+  <div class="row" style="grid-template-columns:1fr auto"><span><b>모은 글자 ${total} / 17</b> <span class="note">· 회색 점선 칸의 이체자는 획을 더한 것이 아니라 모양을 달리한 글자</span></span><button type="button" class="btn" id="odd">${oddShown ? '이체자 숨기기' : '이체자 보기'}</button></div>`;
+  stage.querySelectorAll('[data-r]').forEach(b => b.onclick = () => { const i = +b.dataset.r; shown[i]++; tone(330 + shown[i] * 120); if (shown.every((v, k) => v >= ROWS[k][2].length) && oddShown) good(); drawStroke(); });
+  $('odd').onclick = () => { oddShown = !oddShown; drawStroke(); };
+  stats.innerHTML = statHTML([['가획', '획을 더하는 원리'], ['소리가 세짐', '획을 더하면'], ['ㄱ ㄴ ㅁ ㅅ ㅇ', '기본자'], ['ㆁ ㄹ ㅿ', '이체자']]);
+  ex.innerHTML = '<b>가획(加劃)의 원리</b>: 기본자에 획을 하나씩 더해 같은 자리에서 나는 <b>더 센 소리</b>의 글자를 만들었어요. ㄴ → ㄷ → ㅌ처럼 같은 줄의 글자는 소리 나는 자리가 같아요. 이렇게 <b>기본자 5 + 가획자 9 + 이체자 3 = 17자</b>가 초성이 되었어요.';
+  tip.textContent = '현재 쓰이지 않는 글자 ㆁ(옛이응), ㆆ(여린히읗), ㅿ(반치음)도 창제 당시에는 쓰였어요. 같은 줄 글자들끼리 발음해 보며 소리 세기를 비교해 보세요.'; }
+
+/* ===== 3. 천지인 모음 ===== */
+const VMAP = {'·': '·', 'ㅡ': 'ㅡ', 'ㅣ': 'ㅣ', '·ㅡ': 'ㅗ', 'ㅣ·': 'ㅏ', 'ㅡ·': 'ㅜ', '·ㅣ': 'ㅓ', '··ㅡ': 'ㅛ', 'ㅣ··': 'ㅑ', 'ㅡ··': 'ㅠ', '··ㅣ': 'ㅕ'};
+const ELEVEN = ['·', 'ㅡ', 'ㅣ', 'ㅗ', 'ㅏ', 'ㅜ', 'ㅓ', 'ㅛ', 'ㅑ', 'ㅠ', 'ㅕ'];
+let vseq = '', vgot = new Set();
+function drawVowel(){ const cur = VMAP[vseq];
+  stage.innerHTML = `<p class="lbl">하늘(·), 땅(ㅡ), 사람(ㅣ)을 차례로 눌러 모음을 만들어 보자. 순서에 따라 다른 글자가 된다.</p>
+  <div class="screen jamo">${cur || (vseq ? '?' : '　')}</div><div class="seq">${vseq ? vseq.split('').join(' + ') : '입력 대기'}</div>
+  <div class="keys" style="justify-content:center"><button type="button" class="key" data-v="·" title="하늘">·</button><button type="button" class="key" data-v="ㅡ" title="땅">ㅡ</button><button type="button" class="key" data-v="ㅣ" title="사람">ㅣ</button><button type="button" class="btn" id="vclr">지우기</button></div>
+  <p class="lbl">찾은 중성 (창제 당시 11자)</p><div class="found">${ELEVEN.map(v => `<span class="jamo ${vgot.has(v) ? 'got' : ''}">${v}</span>`).join('')}</div>
+  <p class="msg ${vgot.size === 11 ? 'ok' : ''}">${vgot.size === 11 ? '🎉 11자를 모두 찾았어요! 천지인 자판의 원리를 완성했어요.' : (vseq && !cur ? '<span class="no">그런 조합은 없어요. 지우고 다시!</span>' : '')}</p>`;
+  stage.querySelectorAll('[data-v]').forEach(b => b.onclick = () => { if (vseq.length >= 3) vseq = ''; vseq += b.dataset.v; const c = VMAP[vseq]; if (c) { if (!vgot.has(c)) { vgot.add(c); good(); } else tone(520); } else bad(); drawVowel(); });
+  $('vclr').onclick = () => { vseq = ''; drawVowel(); };
+  stats.innerHTML = statHTML([['· ㅡ ㅣ', '기본 모음 (하늘·땅·사람)'], ['4자', '초출자 ㅗㅏㅜㅓ'], ['4자', '재출자 ㅛㅑㅠㅕ'], [`${vgot.size} / 11`, '찾은 중성']]);
+  ex.innerHTML = '<b>천지인(天地人)의 원리</b>: 모음의 기본자는 둥근 <b>하늘(·)</b>, 평평한 <b>땅(ㅡ)</b>, 서 있는 <b>사람(ㅣ)</b>을 본떴어요. 이 셋을 합해 ㅗ ㅏ ㅜ ㅓ(초출자)를, ·를 하나 더해 ㅛ ㅑ ㅠ ㅕ(재출자)를 만들어 <b>중성 11자</b>가 되었어요.';
+  tip.textContent = '휴대 전화의 천지인 자판이 바로 이 원리예요. 초성 17자 + 중성 11자 = 훈민정음 28자.'; }
+
+/* ===== 4. 글자 조합 게임 ===== */
+const CHO = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'], JUNG = ['ㅏ', 'ㅐ', 'ㅑ', 'ㅒ', 'ㅓ', 'ㅔ', 'ㅕ', 'ㅖ', 'ㅗ', 'ㅘ', 'ㅙ', 'ㅚ', 'ㅛ', 'ㅜ', 'ㅝ', 'ㅞ', 'ㅟ', 'ㅠ', 'ㅡ', 'ㅢ', 'ㅣ'], JONG = ['', 'ㄱ', 'ㄲ', 'ㄳ', 'ㄴ', 'ㄵ', 'ㄶ', 'ㄷ', 'ㄹ', 'ㄺ', 'ㄻ', 'ㄼ', 'ㄽ', 'ㄾ', 'ㄿ', 'ㅀ', 'ㅁ', 'ㅂ', 'ㅄ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
+const KC = ['ㄱ', 'ㄴ', 'ㄷ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅅ', 'ㅇ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'], KV = ['ㅏ', 'ㅑ', 'ㅓ', 'ㅕ', 'ㅗ', 'ㅛ', 'ㅜ', 'ㅠ', 'ㅡ', 'ㅣ', 'ㅐ', 'ㅔ'];
+const WORDS = [['세종', '훈민정음을 만든 왕'], ['한글', '1910년대 주시경 등이 붙인 오늘날의 이름'], ['백성', '훈민정음은 ○○을 가르치는 바른 소리'], ['집현전', '세종 때 학문 연구 기관'], ['나라', '"○○의 말이 중국과 달라…"'], ['하늘', '모음 · 가 본뜬 것'], ['사람', '모음 ㅣ 가 본뜬 것'], ['글자', '스물여덟 ○○를 만드니'], ['소리', '훈민정음 = 백성을 가르치는 바른 ○○'], ['정음', '훈민정음을 줄여 이르는 말']];
+const split = s => { const c = s.charCodeAt(0) - 0xAC00; return [CHO[Math.floor(c / 588)], JUNG[Math.floor(c % 588 / 28)], JONG[c % 28]]; };
+const compose = (a, b, c) => String.fromCharCode(0xAC00 + (CHO.indexOf(a) * 21 + JUNG.indexOf(b)) * 28 + JONG.indexOf(c || ''));
+let G = {order: [], wi: 0, si: 0, pick: [null, null, ''], score: 0, t0: 0, end: 0, msg: '', best: null};
+try { G.best = +localStorage.getItem('hangeul-best') || null; } catch (e) {}
+function newGame(){ G.order = WORDS.slice().sort(() => Math.random() - .5).slice(0, 5); G.wi = 0; G.si = 0; G.pick = [null, null, '']; G.score = 0; G.t0 = performance.now(); G.end = 0; G.msg = ''; drawGame(); }
+function drawGame(){ if (!G.order.length) { stage.innerHTML = `<div class="target jamo">가나다</div><p style="text-align:center">초성 · 중성 · 종성을 골라 낱말을 완성하세요. 5문제, 빠를수록 좋아요!</p><div style="text-align:center"><button type="button" class="btn primary" id="gstart">게임 시작</button></div>`; $('gstart').onclick = newGame; statsGame(); return; }
+  if (G.end) { const sec = ((G.end - G.t0) / 1000).toFixed(1); stage.innerHTML = `<div class="giant">🏆</div><p class="msg ok">5개 낱말 완성! 걸린 시간 ${sec}초 · 실수 ${G.score}회</p><p class="note" style="text-align:center">최고 기록 ${G.best ? G.best.toFixed(1) + '초' : '-'}</p><div style="text-align:center"><button type="button" class="btn primary" id="gstart">다시 하기</button></div>`; $('gstart').onclick = newGame; statsGame(); return; }
+  const [word, hint] = G.order[G.wi], syl = [...word], [c, v, j] = G.pick, preview = c && v ? compose(c, v, j) : (c || '');
+  stage.innerHTML = `<p class="lbl">${G.wi + 1} / 5 · 힌트: ${hint}</p><div class="target jamo">${syl.map((s, i) => `<span class="${i < G.si ? 'done' : i === G.si ? 'now' : ''}">${i < G.si ? s : i === G.si ? (preview || '□') : '□'}</span>`).join('')}</div>
+  <p class="msg">${G.msg}</p>
+  <p class="lbl">초성</p><div class="keys">${KC.map(k => `<button type="button" class="key sm" data-c="${k}" aria-pressed="${c === k}">${k}</button>`).join('')}</div>
+  <p class="lbl">중성</p><div class="keys">${KV.map(k => `<button type="button" class="key sm" data-v="${k}" aria-pressed="${v === k}">${k}</button>`).join('')}</div>
+  <p class="lbl">종성 (받침)</p><div class="keys"><button type="button" class="key sm" data-j="" aria-pressed="${j === ''}" style="font-size:13px">없음</button>${KC.map(k => `<button type="button" class="key sm" data-j="${k}" aria-pressed="${j === k}">${k}</button>`).join('')}</div>
+  <div style="display:flex;gap:8px;justify-content:center"><button type="button" class="btn primary" id="gok" ${c && v ? '' : 'disabled'}>이 글자로 확정</button></div>`;
+  stage.querySelectorAll('[data-c]').forEach(b => b.onclick = () => { G.pick[0] = b.dataset.c; tone(500); drawGame(); });
+  stage.querySelectorAll('[data-v]').forEach(b => b.onclick = () => { G.pick[1] = b.dataset.v; tone(600); drawGame(); });
+  stage.querySelectorAll('[data-j]').forEach(b => b.onclick = () => { G.pick[2] = b.dataset.j; tone(700); drawGame(); });
+  $('gok').onclick = () => { const want = syl[G.si], got = compose(...G.pick); if (got === want) { good(); G.si++; G.pick = [null, null, '']; G.msg = '<span class="ok">좋아요!</span>'; if (G.si >= syl.length) { G.wi++; G.si = 0; G.msg = `<span class="ok">"${word}" 완성!</span>`; if (G.wi >= 5) { G.end = performance.now(); const sec = (G.end - G.t0) / 1000; if (!G.best || sec < G.best) { G.best = sec; try { localStorage.setItem('hangeul-best', sec); } catch (e) {} } } } } else { bad(); G.score++; const [a, b2, c2] = split(want), wrong = [G.pick[0] !== a && '초성', G.pick[1] !== b2 && '중성', (G.pick[2] || '') !== c2 && '종성'].filter(Boolean); G.msg = `<span class="no">"${got}"는 아니에요 — ${wrong.join('·')}을(를) 다시 골라 보세요.</span>`; } drawGame(); };
+  statsGame(); }
+function statsGame(){ stats.innerHTML = statHTML([[`${G.order.length ? Math.min(G.wi + 1, 5) : 0} / 5`, '낱말'], [`${G.score}회`, '실수'], ['초+중+종', '모아쓰기'], [G.best ? G.best.toFixed(1) + '초' : '-', '최고 기록']]);
+  ex.innerHTML = '<b>모아쓰기와 종성부용초성</b>: 훈민정음은 초성·중성·종성을 모아 한 음절을 한 글자로 써요. 받침(종성)에는 따로 글자를 만들지 않고 <b>초성 글자를 다시 쓴다(종성부용초성)</b>는 원칙으로 글자 수를 줄였어요. 적은 글자로 수많은 소리를 적을 수 있는 까닭이에요.';
+  tip.textContent = '모둠 대결: 모둠마다 한 번씩 도전해 걸린 시간과 실수 횟수를 비교해 보세요. 컴퓨터도 이 원리(초성·중성·종성 번호)로 한글 11,172자를 만들어 표시해요.'; }
+
+/* ===== 5. 사료와 연표 ===== */
+const MARKS = {자주: '"나라의 말이 중국과 달라" — 우리말에 맞는 우리 문자가 필요하다는 <b>자주 정신</b>', 애민: '"어리석은 백성이 … 뜻을 펴지 못하는 사람이 많다. 내가 이를 딱하게 여겨" — 백성을 아끼는 <b>애민 정신</b>', 실용: '"사람마다 쉽게 익혀 날마다 쓰는 데 편하게 하고자" — 쉽게 배워 쓰게 하려는 <b>실용 정신</b>'};
+let marked = new Set();
+function drawSource(){ stage.innerHTML = `<p class="lbl">『훈민정음』 어제 서문 (현대어 풀이) — 밑줄 친 부분을 눌러 세종의 창제 정신을 찾아보자</p>
+  <blockquote class="quote"><mark data-m="자주">나라의 말이 중국과 달라</mark> 문자와 서로 통하지 아니하므로, <mark data-m="애민">어리석은 백성이 말하고자 하는 바가 있어도 마침내 제 뜻을 펴지 못하는 사람이 많다. 내가 이를 딱하게 여겨</mark> 새로 스물여덟 자를 만드니, <mark data-m="실용">사람마다 쉽게 익혀 날마다 쓰는 데 편하게 하고자</mark> 할 따름이다.</blockquote>
+  <div class="msg" id="mres">${[...marked].map(k => `<div style="font-weight:500;text-align:left;margin:4px 0">✔ ${MARKS[k]}</div>`).join('')}</div>
+  <div class="tl"><div><b>1443</b>세종, 훈민정음 창제</div><div><b>1446</b>훈민정음 반포 (책 『훈민정음』 해례본 완성 — 음력 9월 상순)</div><div><b>1926</b>조선어 연구회, 반포 480주년 기념 '가갸날' 제정 (1928년 '한글날'로 이름 바꿈)</div><div><b>1940</b>경상북도 안동에서 『훈민정음』 해례본 발견</div><div><b>1997</b>『훈민정음』 해례본, 유네스코 세계 기록 유산 등재</div></div>`;
+  stage.querySelectorAll('mark').forEach(m => m.onclick = () => { if (!marked.has(m.dataset.m)) { marked.add(m.dataset.m); good(); } drawSource(); });
+  stats.innerHTML = statHTML([[`${marked.size} / 3`, '찾은 창제 정신'], ['28자', '초성 17 + 중성 11'], ['10월 9일', '한글날 (해례본 서문 날짜 기준)'], ['국보', '『훈민정음』 해례본']]);
+  ex.innerHTML = '<b>사료 읽기</b>: 서문 짧은 몇 줄에 세종이 문자를 만든 까닭이 모두 담겨 있어요. 한글날 10월 9일은 해례본에 적힌 반포 시기(음력 9월 상순)를 양력으로 바꾼 날이에요.';
+  tip.textContent = '토론 질문: 당시 최만리 등 일부 관리는 새 문자 창제를 반대하는 상소를 올렸어요. 반대한 까닭은 무엇이었을지, 세종은 어떻게 답했을지 모둠별로 추론해 보세요.'; }
+
+/* ===== 탭 ===== */
+const modes = {organ: drawOrgan, stroke: drawStroke, vowel: drawVowel, game: drawGame, source: drawSource}, btns = [...document.querySelectorAll('[data-mode]')];
+const set = m => { btns.forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === m)); try { history.replaceState(null, '', '#' + m); } catch (e) {} modes[m](); };
+btns.forEach(b => b.onclick = () => set(b.dataset.mode)); const want = (location.hash || '').slice(1); set(modes[want] ? want : 'organ');
+})();
+</script>
+</body>
+</html>
