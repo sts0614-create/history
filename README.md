@@ -13,3 +13,10 @@
   - 내용 고치기: `data.js`(차시 자료) · `games.js`(게임) · `sim-data.js`(시뮬레이션) · `_build_decks.py`(슬라이드 원고 → `python3 _build_decks.py`로 다시 만들기)
 
 GitHub Pages: Settings → Pages → Deploy from a branch → main / (root)
+
+추가 설계 요소(2026년 개선)
+- 각 차시마다 영상 계획, 사료 자료, 교사 발문, 생각을 여는 질문을 설계해 수업 흐름을 강화한다.
+- 단순한 게임을 넘어서 ‘사료 해석 → 논쟁 → 정리’의 구조를 유지한다.
+- [korea1/teacher-kit.html](korea1/teacher-kit.html)에서 교사용 설계표를 한눈에 확인할 수 있다.
+- [korea1/teacher-kit.js](korea1/teacher-kit.js)에 각 차시의 핵심 질문과 사료 자료를 분리해 관리한다.
+- 수업 모드와 발문 구조를 연결해 교실에서 즉시 활용할 수 있게 한다.

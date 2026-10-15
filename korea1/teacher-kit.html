@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>교사 수업 설계표 · 역사② Ⅰ단원</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="ui.css">
+<style>
+  .page{max-width:1200px;margin:0 auto;padding:24px 20px 60px}
+  .hero{margin-bottom:22px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+  .card{padding:20px;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface);box-shadow:var(--sh)}
+  .mini{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:var(--brand-soft);color:var(--brand-strong);font-size:12px;font-weight:700}
+  h1{margin:10px 0 8px;font-size:clamp(28px,3.2vw,42px);letter-spacing:-.04em}
+  .lead{margin:0;color:var(--ink2);line-height:1.7}
+  .tcard{padding:18px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);display:grid;gap:14px}
+  .tcard h3{margin:0;font-size:20px;letter-spacing:-.02em}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+  .tag{display:inline-block;padding:4px 8px;border-radius:999px;background:var(--sunk);font-size:12px;font-weight:700;color:var(--ink2)}
+  ul{margin:0;padding-left:18px;line-height:1.8;color:var(--ink2)}
+  strong{color:var(--ink)}
+  .nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);text-decoration:none;font-weight:700}
+  .btn.pri{background:var(--brand);color:white;border-color:var(--brand)}
+  .grid-2{display:grid;grid-template-columns:1.4fr .6fr;gap:18px}
+  @media (max-width: 860px){.grid-2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="gnb"></div>
+<main class="page">
+  <section class="hero card">
+    <span class="mini">수업 설계표 · 교사용 핵심 자료</span>
+    <h1>영상 · 사료 · 발문 · 질문</h1>
+    <p class="lead">각 차시마다 영상 자료, 핵심 사료, 학생들이 생각을 열 수 있는 질문과 교사 발문을 한 번에 확인할 수 있는 설계표입니다. 수업 전 준비와 수업 중 토론을 빠르게 연결할 수 있도록 구성했습니다.</p>
+    <div class="nav">
+      <a class="btn pri" href="index.html">단원 홈으로</a>
+      <a class="btn" href="lesson.html?n=1">1차시 바로 열기</a>
+    </div>
+  </section>
+
+  <div class="grid-2">
+    <section class="card">
+      <h2 style="margin-top:0">교실 운영 원칙</h2>
+      <ul>
+        <li><strong>영상</strong>: 도입, 개념 확인, 사료 연결, 정리용으로 역할을 나눈다.</li>
+        <li><strong>사료</strong>: 단순 목록이 아니라 “왜 중요한지”와 “질문”을 붙여 읽게 한다.</li>
+        <li><strong>발문</strong>: 사실 확인보다 이유와 해석을 요구하는 질문으로 설계한다.</li>
+        <li><strong>질문</strong>: 학생이 서로 다른 관점을 비교할 수 있도록 교차해 본다.</li>
+      </ul>
+    </section>
+    <section class="card">
+      <h2 style="margin-top:0">수업 흐름</h2>
+      <ul>
+        <li>1. 영상으로 열기</li>
+        <li>2. 사료 읽기</li>
+        <li>3. 발문으로 생각 열기</li>
+        <li>4. 모둠 토론이나 게임</li>
+        <li>5. 정리 문제와 출구 카드</li>
+      </ul>
+    </section>
+  </div>
+
+  <section id="kit" class="grid" style="margin-top:24px"></section>
+</main>
+
+<script src="data.js"></script>
+<script src="common.js"></script>
+<script src="teacher-kit.js"></script>
+<script>
+(function () {
+  const { esc } = K1;
+  document.getElementById('gnb').innerHTML = K1.gnb([
+    ["역사② Ⅰ단원", "index.html"],
+    ["교사 수업 설계표", ""]
+  ]);
+  const root = document.getElementById('kit');
+  const cards = Object.entries(window.TEACHER_KIT).map(([n, item]) => `
+    <article class="tcard">
+      <div>
+        <span class="tag">${n}차시</span>
+        <h3>${esc(item.title)}</h3>
+      </div>
+      <div>
+        <strong>수업 초점</strong>
+        <div class="meta"><span class="tag">${esc(item.focus)}</span></div>
+      </div>
+      <div>
+        <strong>영상 계획</strong>
+        <ul>${item.videos.map(v => `<li>${esc(v)}</li>`).join('')}</ul>
+      </div>
+      <div>
+        <strong>핵심 사료</strong>
+        <ul>${item.sources.map(s => `<li>${esc(s)}</li>`).join('')}</ul>
+      </div>
+      <div>
+        <strong>교사 발문</strong>
+        <ul>${item.prompts.map(p => `<li>${esc(p)}</li>`).join('')}</ul>
+      </div>
+      <div>
+        <strong>생각을 여는 질문</strong>
+        <ul>${item.questions.map(q => `<li>${esc(q)}</li>`).join('')}</ul>
+      </div>
+      <div class="nav">
+        <a class="btn" href="lesson.html?n=${n}">이 차시 자료 보기</a>
+      </div>
+    </article>
+  `).join('');
+
+  root.innerHTML = cards;
+})();
+</script>
+</body>
+</html>
