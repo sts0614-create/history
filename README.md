@@ -2,7 +2,7 @@
 
 2022 개정 교육과정 중학교 역사①·②와 고등학교 한국사1·2, 세계사, 동아시아 역사 기행, 역사로 탐구하는 현대 세계의 차시별 수업 자료입니다. 빌드 과정 없이 HTML 파일만으로 작동하는 정적 사이트입니다.
 
-주소: https://simtaesoo.github.io/history/
+주소: https://sts0614-create.github.io/history/
 
 ## 담긴 자료
 
