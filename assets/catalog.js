@@ -284,5 +284,6 @@ window.FILES = {
   'm1/religion': { slides:[1,2,3,4,5,6], sim:[1,2,3,4,5,6], ws:true, game:{ href:'app-faith.html', title:'순례자의 수첩' } },
   'm1/exchange': { slides:[1,2,3,4,5,6], sim:[1,2,3,4,5,6], ws:true, game:{ href:'app-trade.html', title:'교역로의 짐꾼' } },
   'm1/nation': { slides:[1,2,3,4,5,6], sim:[1,2,3,4,5,6], ws:true, game:{ href:'app-nation.html', title:'국민 국가 만들기' } },
+  'm1/wars': { slides:[1,2,3] },
   'm2/modern': { slides:[4], sim:[4], ws:true, game:{ href:'app-timeline.html', title:'근현대 연표 퍼즐' } }
 };
